@@ -10,6 +10,8 @@
                     <tr>
                         <th>#</th>
                         <th>Title</th>
+                        <th>Tập phim</th>
+                        <th>Số tập</th>
                         <th>Tags phim</th>
                         <th>Thời lượng phim</th>
                         <th>Image</th>
@@ -23,7 +25,6 @@
                         <th>Thuộc phim</th>
                         <th>Genre</th>
                         <th>Country</th>
-                        <th>Số tập</th>
                         <th>Ngày tạo</th>
                         <th>Ngày cập nhật</th>
                         <th>Năm phim</th>
@@ -37,6 +38,11 @@
                     <tr>
                         <td scope="row">{{$key}}</td>
                         <td>{{$cate->title}}</td>
+                        <td><a href="{{route('add-episode', [$cate->id])}}" class="btn btn-danger btn-sm">Thêm tập phim</a></td>
+                        <td>
+                            {{$cate->episode_count}}/{{$cate->sotap}} tập
+                        </td>
+
                         <td>
                             {{-- {{$cate->tags}} --}}
                             @if($cate->tags != NULL){
@@ -105,8 +111,6 @@
                             @endforeach
                         </td>
                         <td>{{$cate->country->title}}</td>
-
-                        <td>{{$cate->sotap}}</td>
 
                         <td>{{$cate->ngaytao}}</td>
                         <td>{{$cate->ngaycapnhat}}</td>

@@ -64,17 +64,18 @@
                      @endif
                   </span>
                   <span class="episode"><i class="fa fa-play" aria-hidden="true"></i>
+                     {{$hot->episode_count}}/{{$hot->sotap}}
                      @if($hot->phude == 0)
-                           Phụ đề
-                           @if($hot->season != 0)
-                              - Season {{$hot->season}}
-                           @endif
-                        @else
-                           Thuyết minh
-                           @if($hot->season != 0)
-                              - Season {{$hot->season}}
-                           @endif
+                        Phụ đề
+                        @if($hot->season != 0)
+                           - Season {{$hot->season}}
                         @endif
+                     @else
+                        Thuyết minh
+                        @if($hot->season != 0)
+                           - Season {{$hot->season}}
+                        @endif
+                     @endif
                   </span> 
                   <div class="icon_overlay"></div>
                   <div class="halim-post-title-box">
@@ -124,6 +125,7 @@
                         @endif
                      </span>
                      <span class="episode"><i class="fa fa-play" aria-hidden="true"></i>
+                        {{$mov->episode_count}}/{{$mov->sotap}}
                         @if($mov->phude == 0)
                            Phụ đề
                            @if($mov->season != 0)

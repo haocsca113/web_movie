@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <table class="table">
+            <table class="table table-responsive" id="tablephim">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -23,7 +23,7 @@
                             <td>{{$episode->movie->title}}</td>
                             <td><img width="100px" src="{{asset('uploads/movie/'.$episode->movie->image)}}"></td>
                             <td>{{$episode->episode}}</td>
-                            <td>{!!$episode->linkphim!!}</td>
+                            <td>{{$episode->linkphim}}</td>
 
                             {{-- <td>
                                 @if($cate->status)

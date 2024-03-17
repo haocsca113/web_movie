@@ -41,13 +41,14 @@
                      </span>
 
                      <span class="episode"><i class="fa fa-play" aria-hidden="true"></i>
+                     {{$mov->episode_count}}/{{$mov->sotap}}
                         @if($mov->phude == 0)
-                           Phụ đề - Tập 1/{{$mov->sotap}}
+                           Phụ đề
                            @if($mov->season != 0)
                               - Season {{$mov->season}}
                            @endif
                         @else
-                           Thuyết minh - Tập 1/{{$mov->sotap}}
+                           Thuyết minh
                            @if($mov->season != 0)
                               - Season {{$mov->season}}
                            @endif

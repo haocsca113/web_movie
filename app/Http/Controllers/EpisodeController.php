@@ -15,7 +15,7 @@ class EpisodeController extends Controller
      */
     public function index()
     {
-        $list_episode = Episode::with('movie')->orderBy('movie_id', 'DESC')->get();
+        $list_episode = Episode::with('movie')->orderBy('episode', 'DESC')->get();
         // return response()->json($list_episode);
         return view('admincp.episode.index', compact('list_episode'));
     }
@@ -40,12 +40,26 @@ class EpisodeController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $episode = new Episode();
-        $episode->movie_id = $data['movie_id'];
-        $episode->linkphim = $data['linkphim'];
-        $episode->episode = $data['episode'];
-        $episode->save();
+        $episode_check = Episode::where('episode', $data['episode'])->where('movie_id', $data['movie_id'])->count();
+        if($episode_check > 0){
+            return redirect()->back();
+        }
+        else{
+            $episode = new Episode();
+            $episode->movie_id = $data['movie_id'];
+            $episode->linkphim = $data['linkphim'];
+            $episode->episode = $data['episode'];
+            $episode->save();
+        }  
         return redirect()->back();
+    }
+
+    public function add_episode($id)
+    {
+        $movie = Movie::find($id);
+        $list_episode = Episode::with('movie')->where('movie_id', $id)->orderBy('episode', 'DESC')->get();
+        // return response()->json($list_episode);
+        return view('admincp.episode.add_episode', compact('list_episode', 'movie'));
     }
 
     /**
