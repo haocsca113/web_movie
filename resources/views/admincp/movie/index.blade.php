@@ -115,7 +115,7 @@
                         <td>{{$cate->ngaytao}}</td>
                         <td>{{$cate->ngaycapnhat}}</td>
                         <td>
-                            {!! Form::selectYear('year', 2000, 2024, isset($cate->year) ? $cate->year : '', ['class' => 'select-year', 'id' => $cate->id]) !!}
+                            {!! Form::selectYear('year', 2000, 2024, isset($cate->year) ? $cate->year : '', ['class' => 'select-year', 'id' => $cate->id, 'placeholder' => '--Năm phim--']) !!}
                         </td>
 
                         <td>
@@ -126,7 +126,7 @@
                         </td>
 
                         <td>
-                            {!! Form::select('topview', ['0' => 'Ngày', '1' => 'Tuần', '2' => 'Tháng'], isset($cate->topview) ? $cate->topview : '', ['class' => 'select-topview', 'id' => $cate->id]) !!}
+                            {!! Form::select('topview', ['0' => 'Ngày', '1' => 'Tuần', '2' => 'Tháng'], isset($cate->topview) ? $cate->topview : '', ['class' => 'select-topview', 'id' => $cate->id, 'placeholder' => '--Views--']) !!}
                         </td>
                         <td>
                             {!! Form::open(['method' => 'DELETE', 'route' => ['movie.destroy', $cate->id], 'onsubmit' => 'return confirm("Xóa hay không?")']) !!}

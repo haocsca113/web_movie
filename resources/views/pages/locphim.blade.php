@@ -5,7 +5,7 @@
       <div class="panel-heading">
          <div class="row">
             <div class="col-xs-6">
-               <div class="yoast_breadcrumb hidden-xs"><span><span><a href="">{{$gen_slug->title}}</a> » <span class="breadcrumb_last" aria-current="page">2024</span></span></span></div>
+               <div class="yoast_breadcrumb hidden-xs"><span><span><a href="">Lọc phim</a> » <span class="breadcrumb_last" aria-current="page">2024</span></span></span></div>
             </div>
          </div>
       </div>
@@ -16,7 +16,7 @@
    <main id="main-contents" class="col-xs-12 col-sm-12 col-md-8">
       <section>
          <div class="section-bar clearfix">
-            <h1 class="section-title"><span>{{$gen_slug->title}}</span></h1>
+            <h1 class="section-title"><span>Lọc phim</span></h1>
          </div>
 
          <div class="section-bar clearfix">
@@ -38,15 +38,12 @@
                            HDCam
                         @elseif($mov->resolution == 3)
                            Cam
-                        @elseif($mov->resolution == 4)
-                           FullHD
                         @else
-                           Trailer
+                           FullHD
                         @endif
                      </span>
-
                      <span class="episode"><i class="fa fa-play" aria-hidden="true"></i>
-                     {{$mov->episode_count}}/{{$mov->sotap}}
+                        {{$mov->episode_count}}/{{$mov->sotap}}
                         @if($mov->phude == 0)
                            Phụ đề
                            @if($mov->season != 0)
@@ -59,7 +56,6 @@
                            @endif
                         @endif
                      </span> 
-
                      <div class="icon_overlay"></div>
                      <div class="halim-post-title-box">
                         <div class="halim-post-title ">
@@ -71,7 +67,6 @@
                </div>
             </article>
          @endforeach
-            
          </div>
          <div class="clearfix"></div>
          <div class="text-center">
@@ -88,8 +83,10 @@
          </div>
       </section>
    </main>
+   
    {{-- Sidebar --}}
    @include('pages.include.sidebar')
+
 </div>
 
 @endsection

@@ -26,6 +26,11 @@
          <div class="section-bar clearfix">
             <h1 class="section-title"><span>Năm : {{$year}}</span></h1>
          </div>
+
+         <div class="section-bar clearfix">
+            @include('pages.include.locphim')
+         </div>
+
          <div class="halim_box">
          @foreach($movie as $key => $mov)
             <article class="col-md-3 col-sm-3 col-xs-6 thumb grid-item post-37606">
