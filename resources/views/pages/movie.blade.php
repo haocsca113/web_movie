@@ -130,8 +130,40 @@
                            @else
                               Đang cập nhật
                            @endif
-
                         </li>
+  
+                        <ul class="list-inline rating"  title="Average Rating">
+                           @for($count=1; $count<=5; $count++)
+                              @php
+                                 if($count<=$rating){ 
+                                    $color = 'color:#ffcc00;'; //mau vang
+                                 }
+                                 else {
+                                    $color = 'color:#ccc;'; //mau xam
+                                 }      
+                              @endphp
+                           
+                              <li title="star_rating" 
+                                 id="{{$movie->id}}-{{$count}}" 
+                                 
+                                 data-index="{{$count}}"  
+                                 data-movie_id="{{$movie->id}}" 
+
+                                 data-rating="{{$rating}}" 
+                                 class="rating" 
+                                 style="cursor:pointer; {{$color}} 
+
+                                 font-size:30px;">&#9733;
+                              </li>
+                           @endfor
+                           <span class="total_rating">Đánh giá: {{$rating}}/{{$count_total}} lượt</span>
+                        </ul>
+                        <style>
+                           .rating{
+                              float: left;
+                           }
+                        </style>
+                        
 
                         {{-- <li class="list-info-group-item"><span>Đạo diễn</span> : <a class="director" rel="nofollow" href="https://phimhay.co/dao-dien/cate-shortland" title="Cate Shortland">Cate Shortland</a></li>
                         <li class="list-info-group-item last-item" style="-overflow: hidden;-display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-flex: 1;-webkit-box-orient: vertical;"><span>Diễn viên</span> : <a href="" rel="nofollow" title="C.C. Smiff">C.C. Smiff</a>, <a href="" rel="nofollow" title="David Harbour">David Harbour</a>, <a href="" rel="nofollow" title="Erin Jameson">Erin Jameson</a>, <a href="" rel="nofollow" title="Ever Anderson">Ever Anderson</a>, <a href="" rel="nofollow" title="Florence Pugh">Florence Pugh</a>, <a href="" rel="nofollow" title="Lewis Young">Lewis Young</a>, <a href="" rel="nofollow" title="Liani Samuel">Liani Samuel</a>, <a href="" rel="nofollow" title="Michelle Lee">Michelle Lee</a>, <a href="" rel="nofollow" title="Nanna Blondell">Nanna Blondell</a>, <a href="" rel="nofollow" title="O-T Fagbenle">O-T Fagbenle</a></li> --}}

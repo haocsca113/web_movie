@@ -10,6 +10,7 @@ use App\Models\Country;
 use App\Models\Movie;
 use App\Models\Episode;
 use App\Models\Movie_Genre;
+use App\Models\Rating;
 use DB;
 
 class IndexController extends Controller
@@ -80,7 +81,7 @@ class IndexController extends Controller
         $category = Category::orderBy('id', 'DESC')->where('status', 1)->get();
         $genre = Genre::orderBy('id', 'DESC')->get();
         $country = Country::orderBy('id', 'DESC')->get();
-        $category_home = Category::with(['movie'=> function($q){ $q->withCount('episode'); }])->orderBy('id', 'DESC')->where('status', 1)->get();
+        $category_home = Category::with(['movie'=> function($q){ $q->withCount('episode')->where('status', 1); }])->orderBy('id', 'DESC')->where('status', 1)->get();
         return view('pages.home', compact('category', 'genre', 'country', 'category_home', 'phimhot', 'phimhot_sidebar', 'phimhot_trailer'));
     }
     public function category($slug){
@@ -168,9 +169,33 @@ class IndexController extends Controller
         $episode_current_list = Episode::with('movie')->where('movie_id', $movie->id)->get();
         $episode_current_list_count = $episode_current_list->count();
         
+        // rating movie
+        $rating = Rating::where('movie_id', $movie->id)->avg('rating');
+        $rating = round($rating);
+
+        $count_total = Rating::where('movie_id', $movie->id)->count();
         
-        return view('pages.movie', compact('category', 'genre', 'country', 'movie', 'related', 'phimhot_sidebar', 'phimhot_trailer', 'episode', 'episode_tapdau', 'episode_current_list_count'));
+        return view('pages.movie', compact('category', 'genre', 'country', 'movie', 'related', 'phimhot_sidebar', 'phimhot_trailer', 'episode', 'episode_tapdau', 'episode_current_list_count', 'rating', 'count_total'));
     }
+
+    public function add_rating(Request $request){
+        $data = $request->all();
+        $ip_address = $request->ip();
+
+        $rating_count = Rating::where('movie_id', $data['movie_id'])->where('ip_address', $ip_address)->count();
+        if($rating_count > 0){
+            echo 'exist';
+        }
+        else{
+            $rating = new Rating();
+            $rating->movie_id = $data['movie_id'];
+            $rating->rating = $data['index'];
+            $rating->ip_address = $ip_address;
+            $rating->save();
+            echo 'done';
+        }
+    }
+
     public function watch($slug, $tap){
         $category = Category::orderBy('id', 'DESC')->where('status', 1)->get();
         $genre = Genre::orderBy('id', 'DESC')->get();

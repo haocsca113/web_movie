@@ -33,6 +33,7 @@ Route::get('/nam/{year}', [IndexController::class, 'year']);
 Route::get('/tag/{tag}', [IndexController::class, 'tag']);
 Route::get('/tim-kiem', [IndexController::class, 'timkiem'])->name('tim-kiem');
 Route::get('/locphim', [IndexController::class, 'locphim'])->name('locphim');
+Route::post('/add-rating', [IndexController::class, 'add_rating'])->name('add-rating');
 
 Auth::routes();
 
@@ -55,5 +56,17 @@ Route::post('/update-season-phim', [MovieController::class, 'update_season']);
 Route::get('/update-topview-phim', [MovieController::class, 'update_topview']);
 Route::post('/filter-topview-phim', [MovieController::class, 'filter_topview']);
 Route::get('/filter-topview-default', [MovieController::class, 'filter_default']);
+
+//thay doi du lieu movie bang ajax
+Route::get('/category-choose', [MovieController::class, 'category_choose'])->name('category-choose');
+Route::get('/country-choose', [MovieController::class, 'country_choose'])->name('country-choose');
+Route::get('/phimhot-choose', [MovieController::class, 'phimhot_choose'])->name('phimhot-choose');
+Route::get('/phude-choose', [MovieController::class, 'phude_choose'])->name('phude-choose');
+Route::get('/trangthai-choose', [MovieController::class, 'trangthai_choose'])->name('trangthai-choose');
+Route::get('/thuocphim-choose', [MovieController::class, 'thuocphim_choose'])->name('thuocphim-choose');
+Route::get('/resolution-choose', [MovieController::class, 'resolution_choose'])->name('resolution-choose');
+Route::post('/update-image-movie-ajax', [MovieController::class, 'update_image_movie_ajax'])->name('update-image-movie-ajax');
+
+
 
 

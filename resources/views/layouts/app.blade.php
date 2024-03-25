@@ -100,6 +100,157 @@
     </div>
 
     <script type="text/javascript">
+        $(document).on('change', '.file_image', function(){
+            var movie_id = $(this).data('movie_id');
+            var files = $("#file-"+movie_id)[0].files;
+            {{-- console.log(files); --}}
+
+            var image = document.getElementById("file-"+movie_id).files[0];
+
+            var form_data = new FormData();
+
+            form_data.append("file", document.getElementById("file-"+movie_id).files[0]);
+            form_data.append("movie_id", movie_id);
+
+            $.ajax({
+                url: "{{url('/update-image-movie-ajax')}}",
+                method: "POST",
+                headers: {
+                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: form_data,
+
+                contentType:false,
+                cache:false,
+                processData: false,
+
+                success: function(){
+                    location.reload();
+                    $('#success_image').html('<span class="text-succcess">Cập nhật hình ảnh thành công</span>');
+                }
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+        $('.category_choose').change(function(){
+            var category_id = $(this).val();
+            var movie_id = $(this).attr('id');
+            {{-- alert(category_id);
+            alert(movie_id); --}}
+
+            $.ajax({
+                url: "{{route('category-choose')}}",
+                method: "GET",
+                data: {category_id:category_id, movie_id:movie_id},
+                success: function(data){
+                    alert('Thay đổi thành công');
+                }
+            });
+        })
+    </>
+
+    <script type="text/javascript">
+        $('.country_choose').change(function(){
+            var country_id = $(this).val();
+            var movie_id = $(this).attr('id');
+
+            $.ajax({
+                url: "{{route('country-choose')}}",
+                method: "GET",
+                data: {country_id:country_id, movie_id:movie_id},
+                success: function(data){
+                    alert('Thay đổi thành công');
+                }
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+        $('.phimhot_choose').change(function(){
+            var phimhot_val = $(this).val();
+            var movie_id = $(this).attr('id');
+            {{-- alert(phimhot_val);
+            alert(movie_id); --}}
+        
+            $.ajax({
+                url: "{{route('phimhot-choose')}}",
+                method: "GET",
+                data: {phimhot_val:phimhot_val, movie_id:movie_id},
+                success: function(data){
+                    alert('Thay đổi thành công');
+                }
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+        $('.phude_choose').change(function(){
+            var phude_val = $(this).val();
+            var movie_id = $(this).attr('id');
+            {{-- alert(phude_val);
+            alert(movie_id); --}}
+        
+            $.ajax({
+                url: "{{route('phude-choose')}}",
+                method: "GET",
+                data: {phude_val:phude_val, movie_id:movie_id},
+                success: function(data){
+                    alert('Thay đổi thành công');
+                }
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+        $('.trangthai_choose').change(function(){
+            var trangthai_val = $(this).val();
+            var movie_id = $(this).attr('id');
+        
+            $.ajax({
+                url: "{{route('trangthai-choose')}}",
+                method: "GET",
+                data: {trangthai_val:trangthai_val, movie_id:movie_id},
+                success: function(data){
+                    alert('Thay đổi thành công');
+                }
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+        $('.thuocphim_choose').change(function(){
+            var thuocphim_val = $(this).val();
+            var movie_id = $(this).attr('id');
+        
+            $.ajax({
+                url: "{{route('thuocphim-choose')}}",
+                method: "GET",
+                data: {thuocphim_val:thuocphim_val, movie_id:movie_id},
+                success: function(data){
+                    alert('Thay đổi thành công');
+                }
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+        $('.resolution_choose').change(function(){
+            var resolution_val = $(this).val();
+            var movie_id = $(this).attr('id');
+        
+            $.ajax({
+                url: "{{route('resolution-choose')}}",
+                method: "GET",
+                data: {resolution_val:resolution_val, movie_id:movie_id},
+                success: function(data){
+                    alert('Thay đổi thành công');
+                }
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
         $('.select-movie').change(function(){
             var id = $(this).val();
             $.ajax({

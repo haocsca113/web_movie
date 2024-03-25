@@ -19,10 +19,79 @@ class MovieController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function category_choose(Request $request){
+        $data = $request->all();
+        $movie = Movie::find($data['movie_id']);
+        $movie->category_id = $data['category_id'];
+        $movie->save();
+    }
+
+    public function country_choose(Request $request){
+        $data = $request->all();
+        $movie = Movie::find($data['movie_id']);
+        $movie->country_id = $data['country_id'];
+        $movie->save();
+    }
+
+    public function phimhot_choose(Request $request){
+        $data = $request->all();
+        $movie = Movie::find($data['movie_id']);
+        $movie->phim_hot = $data['phimhot_val'];
+        $movie->save();
+    }
+
+    public function phude_choose(Request $request){
+        $data = $request->all();
+        $movie = Movie::find($data['movie_id']);
+        $movie->phude = $data['phude_val'];
+        $movie->save();
+    }
+
+    public function trangthai_choose(Request $request){
+        $data = $request->all();
+        $movie = Movie::find($data['movie_id']);
+        $movie->status = $data['trangthai_val'];
+        $movie->save();
+    }
+
+    public function thuocphim_choose(Request $request){
+        $data = $request->all();
+        $movie = Movie::find($data['movie_id']);
+        $movie->thuocphim = $data['thuocphim_val'];
+        $movie->save();
+    }
+
+    public function resolution_choose(Request $request){
+        $data = $request->all();
+        $movie = Movie::find($data['movie_id']);
+        $movie->resolution = $data['resolution_val'];
+        $movie->save();
+    }
+
+    public function update_image_movie_ajax(Request $request){
+        $get_image = $request->file('file');
+        $movie_id = $request->movie_id;
+
+        if($get_image){
+            // xoa anh cu
+            $movie = Movie::find($movie_id);
+            unlink('uploads/movie/'.$movie->image);
+
+            // them anh moi
+            $get_name_image = $get_image->getClientOriginalName();
+            $name_image = current(explode('.', $get_name_image));
+            $new_image = $name_image.rand(0,99).'.'.$get_image->getClientOriginalExtension();
+            $get_image->move('uploads/movie/', $new_image);
+            $movie->image = $new_image;
+            $movie->save();
+        }
+    }
+
     public function index()
     {
         $list = Movie::with('category', 'movie_genre', 'country', 'genre')->withCount('episode')->orderBy('id', 'DESC')->get();
-
+        $category = Category::pluck('title', 'id');
+        $country = Country::pluck('title', 'id');
         $path = public_path()."/json/";
         if(!is_dir($path))
         {
@@ -30,7 +99,7 @@ class MovieController extends Controller
         }
         File::put($path.'movies.json', json_encode($list));
 
-        return view('admincp.movie.index', compact('list'));
+        return view('admincp.movie.index', compact('list', 'category', 'country'));
     }
 
     public function update_year(Request $request)

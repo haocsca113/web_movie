@@ -29,7 +29,7 @@
             <select class="form-control stylish_filter" name="genre" id="exampleFormControlSelect1">
             <option value="">--Thể loại--</option>
             @foreach($genre as $key => $gen_filter)
-                <option value={{$gen_filter->id}}>{{$gen_filter->title}}</option>
+                <option {{ (isset($_GET['genre']) && $_GET['genre'] == $gen_filter->id ) ? 'selected' : ''}} value={{$gen_filter->id}}>{{$gen_filter->title}}</option>
             @endforeach
             </select>
         </div>
@@ -39,14 +39,22 @@
             <select class="form-control stylish_filter" name="country" id="exampleFormControlSelect1">
             <option value="">--Quốc gia--</option>
             @foreach($country as $key => $coun_filter)
-                <option value={{$coun_filter->id}}>{{$coun_filter->title}}</option>
+                <option {{ (isset($_GET['country']) && $_GET['country'] == $coun_filter->id ) ? 'selected' : ''}} value={{$coun_filter->id}}>{{$coun_filter->title}}</option>
             @endforeach
             </select>
         </div>
     </div>
     <div class="col-md-3">
         <div class="form-group">
-            {!! Form::selectYear('year', 2010, 2024, null, ['class' => 'form-control stylish_filter', 'placeholder' => '--Năm phim--']) !!}
+            @php
+                if(isset($_GET['year'])){
+                    $year = $_GET['year'];
+                }
+                else{
+                    $year = null;
+                }
+            @endphp
+            {!! Form::selectYear('year', 2010, 2024, $year, ['class' => 'form-control stylish_filter', 'placeholder' => '--Năm phim--']) !!}
         </div>
     </div>
     

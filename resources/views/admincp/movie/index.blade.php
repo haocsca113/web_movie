@@ -20,11 +20,13 @@
                         <th>Phụ đề</th>
                         {{-- <th>Description</th> --}}
                         <th>Slug</th>
+
                         <th>Active/Inactive</th>
                         <th>Category</th>
-                        <th>Thuộc phim</th>
                         <th>Genre</th>
                         <th>Country</th>
+                        <th>Thuộc phim</th>
+
                         <th>Ngày tạo</th>
                         <th>Ngày cập nhật</th>
                         <th>Năm phim</th>
@@ -44,7 +46,6 @@
                         </td>
 
                         <td>
-                            {{-- {{$cate->tags}} --}}
                             @if($cate->tags != NULL){
                                 {{substr($cate->tags, 0, 50)}}...
                             }
@@ -54,16 +55,35 @@
                             @endif
                         </td>
                         <td>{{$cate->thoiluong}}</td>
-                        <td><img width="100px" src="{{asset('uploads/movie/'.$cate->image)}}"></td>
+
                         <td>
-                            @if($cate->phim_hot == 0)
+                            <img width="100px" src="{{asset('uploads/movie/'.$cate->image)}}">
+
+                            <input type="file" data-movie_id="{{$cate->id}}" id="file-{{$cate->id}}" name="image_choose" class="form-control-file file_image" accept="image/*">
+
+                            <span id="success_image"></span>
+                        </td>
+
+                        <td>
+                            {{-- @if($cate->phim_hot == 0)
                                 Không
                             @else
                                 Có
-                            @endif
+                            @endif --}}
+
+                            <select id="{{$cate->id}}" class="phimhot_choose">
+                                @if($cate->phim_hot == 0)
+                                    <option value="1">Có</option>
+                                    <option selected value="0">Không</option>
+                                @else
+                                    <option selected value="1">Có</option>
+                                    <option value="0">Không</option>
+                                @endif
+                            </select>
                         </td>
+
                         <td>
-                            @if($cate->resolution == 0)
+                            {{-- @if($cate->resolution == 0)
                                 HD
                             @elseif($cate->resolution == 1)
                                 SD
@@ -75,34 +95,61 @@
                                 FullHD
                             @else
                                 Trailer
-                            @endif
+                            @endif --}}
+
+                            @php
+                                $options = array('0' => 'HD', '1' => 'SD', '2' => 'HDCam', '3' => 'Cam', '4' => 'FullHD', '5' => 'Trailer');
+                            @endphp
+                            <select id="{{$cate->id}}" class="resolution_choose">
+                                @foreach($options as $key => $resolution)
+                                    <option {{$cate->resolution == $key ? 'selected' : ''}} value="{{$key}}">{{$resolution}}</option>
+                                @endforeach
+                            </select>
                         </td>
+
                         <td>
-                            @if($cate->phude == 0)
+                            {{-- @if($cate->phude == 0)
                                 Phụ đề
                             @else
                                 Thuyết minh
-                            @endif
+                            @endif --}}
+
+                            <select id="{{$cate->id}}" class="phude_choose">
+                                @if($cate->phude == 0)
+                                    <option value="1">Thuyết minh</option>
+                                    <option selected value="0">Phụ đề</option>
+                                @else
+                                    <option selected value="1">Thuyết minh</option>
+                                    <option value="0">Phụ đề</option>
+                                @endif
+                            </select>
                         </td>
 
                         {{-- <td>{{$cate->description}}</td> --}}
                         
                         <td>{{$cate->slug}}</td>
+
                         <td>
-                            @if($cate->status)
+                            {{-- @if($cate->status)
                                 Hiển thị
                             @else
                                 Không hiển thị
-                            @endif
+                            @endif --}}
+
+                            <select id="{{$cate->id}}" class="trangthai_choose">
+                                @if($cate->status == 0)
+                                    <option value="1">Hiển thị</option>
+                                    <option selected value="0">Không</option>
+                                @else
+                                    <option selected value="1">Hiển thị</option>
+                                    <option value="0">Không</option>
+                                @endif
+                            </select>
                         </td>
-                        <td>{{$cate->category->title}}</td>
 
                         <td>
-                            @if($cate->thuocphim == 'phimle')
-                                Phim lẻ
-                            @else
-                                Phim bộ
-                            @endif
+                            {{-- {{$cate->category->title}} --}}
+                            {!! Form::select('category_id', $category, isset($cate) ? $cate->category->id : '', ['class' => 'form-control category_choose', 'id' => $cate->id]) !!}
                         </td>
 
                         <td>
@@ -110,7 +157,29 @@
                                 {{$gen->title}}
                             @endforeach
                         </td>
-                        <td>{{$cate->country->title}}</td>
+
+                        <td>
+                            {{-- {{$cate->country->title}} --}}
+                            {!! Form::select('country_id', $country, isset($cate) ? $cate->country->id : '', ['class' => 'form-control country_choose', 'id' => $cate->id]) !!}
+                        </td>
+
+                        <td>
+                            {{-- @if($cate->thuocphim == 'phimle')
+                                Phim lẻ
+                            @else
+                                Phim bộ
+                            @endif --}}
+
+                            <select id="{{$cate->id}}" class="thuocphim_choose">
+                                @if($cate->thuocphim == 'phimbo')
+                                    <option value="phimle">Phim lẻ</option>
+                                    <option selected value="phimbo">Phim bộ</option>
+                                @else
+                                    <option selected value="phimle">Phim lẻ</option>
+                                    <option value="phimbo">Phim bộ</option>
+                                @endif
+                            </select>
+                        </td>
 
                         <td>{{$cate->ngaytao}}</td>
                         <td>{{$cate->ngaycapnhat}}</td>
