@@ -162,10 +162,13 @@ class MovieController extends Controller
                         <p class="title">'.$mov->title.'</p>
                         </a>
                         <div class="viewsCount" style="color: #9d9d9d;">3.2K lượt xem</div>
+                        <div class="viewsCount" style="color: #9d9d9d;">'.$mov->year.'</div>
                         <div style="float: left;">
-                        <span class="user-rate-image post-large-rate stars-large-vang" style="display: block;/* width: 100%; */">
-                        <span style="width: 0%"></span>
-                        </span>
+                            <ul class="list-inline rating"  title="Average Rating">';
+                                for($count=1; $count<=5; $count++){
+                                    $output.= '<li title="star_rating" style="font-size:20px; color:#ffcc00; padding: 0;">&#9733;</li>';
+                                }
+                            $output.= '</ul>
                         </div>
                     </div>';
         }
@@ -256,6 +259,7 @@ class MovieController extends Controller
         $movie->status = $data['status'];
         $movie->category_id = $data['category_id'];
         $movie->thuocphim = $data['thuocphim'];
+        $movie->count_views = rand(100, 99999);
 
         // $movie->genre_id = $data['genre_id'];
 

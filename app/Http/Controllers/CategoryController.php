@@ -37,7 +37,24 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
+        // $data = $request->all();
+        $data = $request->validate(
+            [
+                'title' => 'required|unique:categories|max:255',
+                'slug' => 'required|unique:categories|max:255',
+                'description' => 'required|max:255',
+                'status' => 'required',
+            ],
+            [
+                'title.unique' => 'Tên danh mục đã có',
+                'slug.unique' => 'Tên slug đã có',
+                'title.required' => 'Tên danh mục phải có nhé',
+                'slug.required' => 'Tên slug phải có nhé',
+                'description.required' => 'Mô tả phải có nhé',
+                'status.required' => 'Status phải có nhé',
+            ]
+        );
+
         $category = new Category();
         $category->title = $data['title'];
         $category->slug = $data['slug'];

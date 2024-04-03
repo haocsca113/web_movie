@@ -99,9 +99,17 @@
       @foreach($category_home as $key => $cate_home)
       <section id="halim-advanced-widget-2">
          <div class="section-heading">
-            <a href="danhmuc.php" title="Phim Bộ">
             <span class="h-text">{{$cate_home->title}}</span>
+            
+            <a href="{{route('category', $cate_home->slug)}}" class="xemthem" title="Xem Thêm">
+               <span class="h-text">Xem Thêm</span>
             </a>
+            <style>
+               .xemthem{
+                  position: absolute;
+                  right: 0;
+               }
+            </style>
          </div>
          <div id="halim-advanced-widget-2-ajax-box" class="halim_box">
          @foreach($cate_home->movie->take(12) as $key => $mov)

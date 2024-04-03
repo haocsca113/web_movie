@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Quản lý danh mục</div>
+                <div class="card-header">Quản lý thông tin website</div>
 
                 @if($errors->any())
                     <div class="alert alert-danger">
@@ -24,42 +24,40 @@
                         </div>
                     @endif
 
-                    @if(!isset($category))
-                        {!! Form::open(['route' => 'category.store', 'method' => 'POST']) !!}
-                    @else
-                        {!! Form::open(['route' => ['category.update', $category->id], 'method' => 'PUT']) !!}
-                    @endif
+                    {!! Form::open(['route' => ['info.update', $info->id], 'method' => 'PUT', 'enctype'=>'multipart/form-data']) !!}
 
                         <div class="form-group mb-3">
-                            {!! Form::label('title', 'Title') !!}
-                            {!! Form::text('title', isset($category) ? $category->title : '', ['class' => 'form-control', 'placeholder' => 'Nhập vào dữ liệu', 'id' => 'slug', 'onkeyup' => 'ChangeToSlug()']) !!}
-                        </div>
-                        <div class="form-group mb-3">
-                            {!! Form::label('slug', 'Slug') !!}
-                            {!! Form::text('slug', isset($category) ? $category->slug : '', ['class' => 'form-control', 'placeholder' => 'Nhập vào dữ liệu', 'id' => 'convert_slug']) !!}
+                            {!! Form::label('title', 'Tiêu đề website') !!}
+                            {!! Form::text('title', isset($info) ? $info->title : '', ['class' => 'form-control', 'placeholder' => 'Nhập vào dữ liệu']) !!}
                         </div>
 
                         <div class="form-group mb-3">
-                            {!! Form::label('description', 'Description') !!}
-                            {!! Form::textarea('description', isset($category) ? $category->description : '', ['class' => 'form-control', 'placeholder' => 'Nhập vào dữ liệu', 'id' => 'description']) !!}
+                            {!! Form::label('description', 'Mô tả website') !!}
+                            {!! Form::textarea('description', isset($info) ? $info->description : '', ['class' => 'form-control', 'placeholder' => 'Nhập vào dữ liệu', 'id' => 'description']) !!}
                         </div>
 
                         <div class="form-group mb-3">
-                            {!! Form::label('status', 'Status') !!}
-                            {!! Form::select('status', ['1' => 'Hiển thị', '0' => 'Không hiển thị'], isset($category) ?$category->status : '', ['id' => 'status', 'class' => 'form-control']) !!}
+                            {!! Form::label('Logo', 'Hình ảnh logo') !!}
+                            {!! Form::file('logo', ['class' => 'form-control-file']) !!}
+                            @if(isset($info))
+                                <div>
+                                    <img width="10%" src="{{asset('uploads/logo/'.$info->logo)}}">
+                                </div>
+                            @endif
                         </div>
 
-                    @if(!isset($category))
-                        {!! Form::submit('Thêm dữ liệu', ['class' => 'btn btn-success']) !!}
-                    @else
-                        {!! Form::submit('Cập nhật', ['class' => 'btn btn-success']) !!}
-                    @endif
+                        <div class="form-group mb-3">
+                            {!! Form::label('copyright', 'Copyright') !!}
+                            {!! Form::text('copyright', isset($info) ? $info->copyright : '', ['class' => 'form-control', 'placeholder' => 'Nhập vào dữ liệu']) !!}
+                        </div>
+
+                        {!! Form::submit('Cập nhật thông tin website', ['class' => 'btn btn-success']) !!}
 
                     {!! Form::close() !!}
                 </div>
             </div>
 
-            <table class="table" id="tablephim">
+            {{-- <table class="table" id="tablephim">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -85,16 +83,16 @@
                             @endif
                         </td>
                         <td>
-                            {!! Form::open(['method' => 'DELETE', 'route' => ['category.destroy', $cate->id], 'onsubmit' => 'return confirm("Xóa hay không?")']) !!}
+                            {!! Form::open(['method' => 'DELETE', 'route' => ['info.destroy', $cate->id], 'onsubmit' => 'return confirm("Xóa hay không?")']) !!}
                                 <button type="submit" class="btn btn-danger">Xóa</button>
                             {!! Form::close() !!}
 
-                            <a name="" id="" class="btn btn-warning" href="{{route('category.edit', $cate->id)}}">Sửa</a>
+                            <a name="" id="" class="btn btn-warning" href="{{route('info.edit', $cate->id)}}">Sửa</a>
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
-            </table>
+            </table> --}}
         </div>
     </div>
 </div>

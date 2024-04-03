@@ -28,7 +28,7 @@
         <div class="form-group">
             <select class="form-control stylish_filter" name="genre" id="exampleFormControlSelect1">
             <option value="">--Thể loại--</option>
-            @foreach($genre as $key => $gen_filter)
+            @foreach($genre_h as $key => $gen_filter)
                 <option {{ (isset($_GET['genre']) && $_GET['genre'] == $gen_filter->id ) ? 'selected' : ''}} value={{$gen_filter->id}}>{{$gen_filter->title}}</option>
             @endforeach
             </select>
@@ -38,7 +38,7 @@
         <div class="form-group">
             <select class="form-control stylish_filter" name="country" id="exampleFormControlSelect1">
             <option value="">--Quốc gia--</option>
-            @foreach($country as $key => $coun_filter)
+            @foreach($country_h as $key => $coun_filter)
                 <option {{ (isset($_GET['country']) && $_GET['country'] == $coun_filter->id ) ? 'selected' : ''}} value={{$coun_filter->id}}>{{$coun_filter->title}}</option>
             @endforeach
             </select>

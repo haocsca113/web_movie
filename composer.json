@@ -13,6 +13,7 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
         "laravelcollective/html": "^6.4",
+        "laravelium/sitemap": "^8.0",
         "yoeunes/toastr": "^2.3"
     },
     "require-dev": {
