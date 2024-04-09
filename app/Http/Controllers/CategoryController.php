@@ -14,7 +14,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $list = Category::orderBy('position', 'ASC')->get();
+        return view('admincp.category.index', compact('list'));
     }
 
     /**
@@ -25,8 +26,7 @@ class CategoryController extends Controller
     public function create()
     {
         // $list = Category::all();
-        $list = Category::orderBy('position', 'ASC')->get();
-        return view('admincp.category.form', compact('list'));
+        return view('admincp.category.form');
     }
 
     /**
@@ -62,7 +62,7 @@ class CategoryController extends Controller
         $category->status = $data['status'];
         $category->save();
         toastr()->success('Thành công', 'Thêm danh mục phim thành công.');
-        return redirect()->back();
+        return redirect()->route('category.index');
     }
 
     /**
@@ -106,7 +106,7 @@ class CategoryController extends Controller
         $category->status = $data['status'];
         $category->save();
         toastr()->success('Thành công', 'Cập nhật danh mục phim thành công.');
-        return redirect()->back();
+        return redirect()->route('category.index');
     }
 
     /**

@@ -14,7 +14,8 @@ class CountryController extends Controller
      */
     public function index()
     {
-        //
+        $list = Country::all();
+        return view('admincp.country.index', compact('list'));
     }
 
     /**
@@ -24,8 +25,7 @@ class CountryController extends Controller
      */
     public function create()
     {
-        $list = Country::all();
-        return view('admincp.country.form', compact('list'));
+        return view('admincp.country.form');
     }
 
     /**
@@ -43,7 +43,7 @@ class CountryController extends Controller
         $country->description = $data['description'];
         $country->status = $data['status'];
         $country->save();
-        return redirect()->back();
+        return redirect()->route('country.index');
     }
 
     /**
@@ -86,7 +86,7 @@ class CountryController extends Controller
         $country->description = $data['description'];
         $country->status = $data['status'];
         $country->save();
-        return redirect()->back();
+        return redirect()->route('country.index');
     }
 
     /**

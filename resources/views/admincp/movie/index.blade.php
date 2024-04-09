@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <a href="{{route('movie.create')}}" class="btn btn-primary">Thêm phim</a>
-            <table class="table" id="tablephim">
+            <table class="row-border hover table" id="tablephim">
                 <thead>
                     <tr>
                         <th>#</th>

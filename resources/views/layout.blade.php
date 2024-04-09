@@ -10,18 +10,28 @@
       <meta name="language" content="Việt Nam">
       <meta name="csrf-token" content="{{ csrf_token() }}" />
 
-      <link rel="shortcut icon" href="https://www.pngkey.com/png/detail/360-3601772_your-logo-here-your-company-logo-here-png.png" type="image/x-icon" />
+      <link rel="shortcut icon" href="{{asset('uploads/logo/'.$info->logo)}}" type="image/x-icon" />
       <meta name="revisit-after" content="1 days" />
+
       <meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
-      <title>Phim hay 2021 - Xem phim hay nhất</title>
-      <meta name="description" content="Phim hay 2021 - Xem phim hay nhất, xem phim online miễn phí, phim hot , phim nhanh" />
-      <link rel="canonical" href="">
+
+      <title>{{$meta_title}}</title>
+
+      <meta name="description" content="{{$meta_description}}" />
+
+      <link rel="canonical" href="{{Request::url()}}">
+
       <link rel="next" href="" />
       <meta property="og:locale" content="vi_VN" />
-      <meta property="og:title" content="Phim hay 2020 - Xem phim hay nhất" />
-      <meta property="og:description" content="Phim hay 2020 - Xem phim hay nhất, phim hay trung quốc, hàn quốc, việt nam, mỹ, hong kong , chiếu rạp" />
-      <meta property="og:url" content="" />
-      <meta property="og:site_name" content="Phim hay 2021- Xem phim hay nhất" />
+
+      <meta property="og:title" content="{{$meta_title}}" />
+
+      <meta property="og:description" content="{{$meta_description}}" />
+
+      <meta property="og:url" content="{{Request::url()}}" />
+
+      <meta property="og:site_name" content="{{$meta_title}}" />
+
       <meta property="og:image" content="" />
       <meta property="og:image:width" content="300" />
       <meta property="og:image:height" content="55" />
@@ -154,6 +164,7 @@
       </div>
       <div class="container">
          @yield('content')
+         @include('pages.include.banner')
       </div>
       <div class="clearfix"></div>
       <footer id="footer" class="clearfix">
@@ -195,6 +206,12 @@
       
       <div id="fb-root"></div>
       <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v19.0" nonce="EgGHVla4"></script>
+
+      <script type="text/javascript">
+         $(window).on('load', function(){
+            $('#banner_quangcao').modal('show');
+         });
+      </script>
 
       <script type="text/javascript">
         
