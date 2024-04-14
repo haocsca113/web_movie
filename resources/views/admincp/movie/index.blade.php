@@ -1,6 +1,28 @@
 @extends('layouts.app')
 
 @section('content')
+
+<div class="modal" id="videoModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><span id="video_title"></span></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p id="video_desc"></p>
+        <p id="video_link"></p>
+      </div>
+      <div class="modal-footer">
+        {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-md-12">
@@ -40,7 +62,17 @@
                     <tr>
                         <td scope="row">{{$key}}</td>
                         <td>{{$cate->title}}</td>
-                        <td><a href="{{route('add-episode', [$cate->id])}}" class="btn btn-danger btn-sm">Thêm tập phim</a></td>
+
+                        <td>
+                            <a href="{{route('add-episode', [$cate->id])}}" class="btn btn-danger btn-sm">Thêm tập phim</a>
+                            @foreach($cate->episode as $key => $epi)
+                                <a class="show_video" data-movie_video_id={{$epi->movie_id}} data-video_episode={{$epi->episode}} style="color: #fff; cursor:pointer;">
+                                    <span class="badge text-bg-dark">{{$epi->episode}}</span>
+                                </a>
+                            @endforeach
+                        </td>
+
+
                         <td>
                             {{$cate->episode_count}}/{{$cate->sotap}} tập
                         </td>

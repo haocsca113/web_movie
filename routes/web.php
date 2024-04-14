@@ -10,6 +10,7 @@ use App\Http\Controllers\CountryController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\EpisodeController;
 use App\Http\Controllers\InfoController;
+use App\Http\Controllers\LinkMovieController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +49,7 @@ Route::resource('genre', GenreController::class);
 Route::resource('country', CountryController::class);
 Route::resource('movie', MovieController::class);
 Route::resource('info', InfoController::class);
+Route::resource('linkmovie', LinkMovieController::class);
 //them tap phim
 Route::get('add-episode/{id}', [EpisodeController::class, 'add_episode'])->name('add-episode');
 Route::resource('episode', EpisodeController::class);
@@ -68,6 +70,7 @@ Route::get('/trangthai-choose', [MovieController::class, 'trangthai_choose'])->n
 Route::get('/thuocphim-choose', [MovieController::class, 'thuocphim_choose'])->name('thuocphim-choose');
 Route::get('/resolution-choose', [MovieController::class, 'resolution_choose'])->name('resolution-choose');
 Route::post('/update-image-movie-ajax', [MovieController::class, 'update_image_movie_ajax'])->name('update-image-movie-ajax');
+Route::post('/watch-video', [MovieController::class, 'watch_video'])->name('watch-video');
 
 
 

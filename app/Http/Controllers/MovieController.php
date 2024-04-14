@@ -403,4 +403,16 @@ class MovieController extends Controller
         $movie->delete();
         return redirect()->back();
     }
+
+    public function watch_video(Request $request){
+        $data = $request->all();
+        $movie = Movie::find($data['movie_id']);
+        $video = Episode::where('movie_id', $data['movie_id'])->where('episode', $data['episode_id'])->first();
+        $output['video_title'] = $movie->title.'- tập'.$video->episode;
+        $output['video_desc'] = $movie->description;
+
+        $output['video_link'] = $video->linkphim;
+
+        echo json_encode($output);
+    }
 }

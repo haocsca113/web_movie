@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Info extends Model
+class LinkMovie extends Model
 {
     use HasFactory;
     public $timestamps = false;
-    protected $table = 'info';
+    protected $table = 'linkmovie';
     protected $fillable = [
-        'title', 'description', 'logo'
+        'title', 'description', 'status'
     ];
 }
