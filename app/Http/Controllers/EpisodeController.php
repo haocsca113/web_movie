@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Movie;
 use App\Models\Episode;
+use App\Models\LinkMovie;
 
 class EpisodeController extends Controller
 {
@@ -40,26 +41,36 @@ class EpisodeController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $episode_check = Episode::where('episode', $data['episode'])->where('movie_id', $data['movie_id'])->count();
-        if($episode_check > 0){
-            return redirect()->back();
-        }
-        else{
-            $episode = new Episode();
-            $episode->movie_id = $data['movie_id'];
-            $episode->linkphim = $data['linkphim'];
-            $episode->episode = $data['episode'];
-            $episode->save();
-        }  
+        // $episode_check = Episode::where('episode', $data['episode'])->where('movie_id', $data['movie_id'])->count();
+        // if($episode_check > 0){
+        //     return redirect()->back();
+        // }
+        // else{
+        //     $episode = new Episode();
+        //     $episode->movie_id = $data['movie_id'];
+        //     $episode->linkphim = $data['linkphim'];
+        //     $episode->episode = $data['episode'];
+        //     $episode->server = $data['linkserver'];
+        //     $episode->save();
+        // }  
+
+        $episode = new Episode();
+        $episode->movie_id = $data['movie_id'];
+        $episode->linkphim = $data['linkphim'];
+        $episode->episode = $data['episode'];
+        $episode->server = $data['linkserver'];
+        $episode->save();
         return redirect()->back();
     }
 
     public function add_episode($id)
     {
+        $linkmovie = LinkMovie::orderBy('id', 'DESC')->pluck('title', 'id');
+        $list_server = LinkMovie::orderBy('id', 'DESC')->get();
         $movie = Movie::find($id);
         $list_episode = Episode::with('movie')->where('movie_id', $id)->orderBy('episode', 'DESC')->get();
         // return response()->json($list_episode);
-        return view('admincp.episode.add_episode', compact('list_episode', 'movie'));
+        return view('admincp.episode.add_episode', compact('list_episode', 'movie', 'linkmovie', 'list_server'));
     }
 
     /**
@@ -81,9 +92,10 @@ class EpisodeController extends Controller
      */
     public function edit($id)
     {
+        $linkmovie = LinkMovie::orderBy('id', 'DESC')->pluck('title', 'id');
         $list_movie = Movie::orderBy('id', 'DESC')->pluck('title', 'id');
         $episode = Episode::find($id);
-        return view('admincp.episode.form', compact('episode', 'list_movie'));
+        return view('admincp.episode.form', compact('episode', 'list_movie', 'linkmovie'));
     }
 
     /**
@@ -99,9 +111,10 @@ class EpisodeController extends Controller
         $episode = Episode::find($id);
         $episode->movie_id = $data['movie_id'];
         $episode->linkphim = $data['linkphim'];
+        $episode->server = $data['linkserver'];
         $episode->episode = $data['episode'];
         $episode->save();
-        return redirect()->to('episode');
+        return redirect()->to('add-episode/'.$episode->movie_id);
     }
 
     /**

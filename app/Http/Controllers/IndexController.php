@@ -12,6 +12,7 @@ use App\Models\Episode;
 use App\Models\Movie_Genre;
 use App\Models\Rating;
 use App\Models\Info;
+use App\Models\LinkMovie;
 use DB;
 
 class IndexController extends Controller
@@ -170,7 +171,7 @@ class IndexController extends Controller
         }
     }
 
-    public function watch($slug, $tap){
+    public function watch($slug, $tap, $server_active){
         $movie = Movie::with('category', 'genre', 'country', 'movie_genre', 'episode')->where('slug', $slug)->where('status', 1)->first();
         // return response()->json($movie);
         $meta_title = 'Xem phim: '.$movie->title;
@@ -189,7 +190,11 @@ class IndexController extends Controller
             $episode = Episode::where('movie_id', $movie->id)->where('episode', $tapphim)->first();
         }
 
-        return view('pages.watch', compact('movie', 'episode', 'tapphim', 'related', 'meta_title', 'meta_description'));
+        $server = LinkMovie::orderBy('id', 'DESC')->get();
+        $episode_movie = Episode::where('movie_id', $movie->id)->orderBy('episode', 'ASC')->get()->unique('server');
+        $episode_list = Episode::where('movie_id', $movie->id)->orderBy('episode', 'ASC')->get();
+
+        return view('pages.watch', compact('movie', 'episode', 'tapphim', 'related', 'meta_title', 'meta_description', 'server', 'episode_movie', 'episode_list', 'server_active'));
     }
     public function episode(){
         return view('pages.episode');

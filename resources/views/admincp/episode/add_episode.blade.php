@@ -44,6 +44,11 @@
                             </div>
                         @endif
 
+                        <div class="form-group mb-3">
+                            {!! Form::label('linkserver', 'Link Server', []) !!}
+                            {!! Form::select('linkserver', $linkmovie, '', ['class' => 'form-control']) !!}
+                        </div>
+
 
                         @if(!isset($episode))
                             {!! Form::submit('Thêm tập phim', ['class' => 'btn btn-success']) !!}
@@ -66,7 +71,7 @@
                         <th>Hình ảnh</th>
                         <th>Tập phim</th>
                         <th>Link phim</th>
-                        {{-- <th>Active/Inactive</th> --}}
+                        <th>Server</th>
                         <th>Manage</th>
                     </tr>
                 </thead>
@@ -79,13 +84,13 @@
                             <td>{{$episode->episode}}</td>
                             <td>{{$episode->linkphim}}</td>
 
-                            {{-- <td>
-                                @if($cate->status)
-                                    Hiển thị
-                                @else
-                                    Không hiển thị
-                                @endif
-                            </td> --}}
+                            <td>
+                                @foreach($list_server as $key => $server_link)
+                                    @if($episode->server == $server_link->id)
+                                        {{$server_link->title}}
+                                    @endif
+                                @endforeach
+                            </td>
 
                             <td>
                                 {!! Form::open(['method' => 'DELETE', 'route' => ['episode.destroy', $episode->id], 'onsubmit' => 'return confirm("Xóa hay không?")']) !!}

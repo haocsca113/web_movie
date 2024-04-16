@@ -41,7 +41,7 @@
                         @if($episode_current_list_count > 0)
                            <div class="bwa-content">
                               <div class="loader"></div>
-                              <a href="{{url('xem-phim/'.$movie->slug.'/tap-'.$episode_tapdau->episode)}}" class="bwac-btn">
+                              <a href="{{url('xem-phim/'.$movie->slug.'/tap-'.$episode_tapdau->episode.'/server-'.$episode_tapdau->server)}}" class="bwac-btn">
                               <i class="fa fa-play"></i>
                               </a>
                            </div>

@@ -96,18 +96,39 @@
                     <li role="presentation" class="active server-1"><a href="#server-0" aria-controls="server-0" role="tab" data-toggle="tab"><i class="hl-server"></i> Vietsub</a></li>
                 </ul>
                 <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active server-1" id="server-0">
-                    <div class="halim-server">
-                        <ul class="halim-list-eps">
-                            @foreach($movie->episode as $key => $sotap)
-                                <a href="{{url('xem-phim/'.$movie->slug.'/tap-'.$sotap->episode)}}">
-                                    <li class="halim-episode"><span class="halim-btn halim-btn-2 {{$tapphim == $sotap->episode ? 'active' : ''}} halim-info-1-1 box-shadow" data-post-id="37976" data-server="1" data-episode="1" data-position="first" data-embed="0" data-title="Xem phim {{$movie->title}}- Tập {{$sotap->episode}} - {{$movie->name_eng}} - vietsub + Thuyết Minh" data-h1="{{$movie->title}} - tập {{$sotap->episode}}">{{$sotap->episode}}</span></li>
-                                </a>
-                            @endforeach
-                        </ul>
-                        <div class="clearfix"></div>
+                    <div role="tabpanel" class="tab-pane active server-1" id="server-0">
+                        <div class="halim-server">
+                            {{-- <ul class="halim-list-eps">
+                                @foreach($movie->episode as $key => $sotap)
+                                    <a href="{{url('xem-phim/'.$movie->slug.'/tap-'.$sotap->episode)}}">
+                                        <li class="halim-episode"><span class="halim-btn halim-btn-2 {{$tapphim == $sotap->episode ? 'active' : ''}} halim-info-1-1 box-shadow" data-post-id="37976" data-server="1" data-episode="1" data-position="first" data-embed="0" data-title="Xem phim {{$movie->title}}- Tập {{$sotap->episode}} - {{$movie->name_eng}} - vietsub + Thuyết Minh" data-h1="{{$movie->title}} - tập {{$sotap->episode}}">{{$sotap->episode}}</span></li>
+                                    </a>
+                                @endforeach
+                            </ul> --}}
+
+                            <ul class="halim-list-eps">
+                                @foreach($server as $key => $ser)
+                                    @foreach($episode_movie as $key => $ep_mov)
+                                        @if($ep_mov->server == $ser->id)
+                                            <li style="display: flex;" class="halim-episode"><span class="halim-btn halim-btn-2 halim-info-1-1 box-shadow">{{$ser->title}}</span></li>
+
+                                            {{-- Tập phim --}}
+                                            <ul class="halim-list-eps">
+                                                @foreach($episode_list as $key => $epi)
+                                                    @if($epi->server == $ser->id)
+                                                        <a href="{{url('xem-phim/'.$movie->slug.'/tap-'.$epi->episode.'/server-'.$epi->server)}}">
+                                                            <li class="halim-episode"><span class="halim-btn halim-btn-2 {{$tapphim == $epi->episode && $server_active == 'server-'.$ser->id ? 'active' : ''}} halim-info-1-1 box-shadow" data-title="Xem phim {{$movie->title}}- Tập {{$epi->episode}} - {{$movie->name_eng}} - vietsub + Thuyết Minh" data-h1="{{$movie->title}} - tập {{$epi->episode}}">{{$epi->episode}}</span></li>
+                                                        </a>
+                                                    @endif
+                                                @endforeach
+                                            </ul>
+                                        @endif  
+                                    @endforeach 
+                                @endforeach
+                            </ul> 
+                            <div class="clearfix"></div>
+                        </div>
                     </div>
-                </div>
                 </div>
             </div>
             <div class="clearfix"></div>
