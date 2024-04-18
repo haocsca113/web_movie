@@ -102,6 +102,32 @@ class MovieController extends Controller
         return view('admincp.movie.index', compact('list', 'category', 'country'));
     }
 
+    public function sort_movie(){
+        $category = Category::orderBy('position', 'ASC')->get();
+        $category_home = Category::with(['movie'=> function($q){ $q->withCount('episode')->where('status', 1); }])->orderBy('position', 'ASC')->where('status', 1)->get();
+        return view('admincp.movie.sort_movie', compact('category', 'category_home'));
+    }
+
+    public function resorting_navbar(Request $request){
+       $data = $request->all();
+       
+       foreach($data['array_id'] as $key => $value){
+        $category = Category::find($value);
+        $category->position = $key;
+        $category->save();
+       }
+    }
+
+    public function resorting_movie(Request $request){
+       $data = $request->all();
+       
+       foreach($data['movie_array'] as $key => $value){
+        $movie = Movie::find($value);
+        $movie->position = $key;
+        $movie->save();
+       }
+    }
+
     public function update_year(Request $request)
     {
         $data = $request->all();

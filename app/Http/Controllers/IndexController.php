@@ -70,7 +70,7 @@ class IndexController extends Controller
         $meta_description = $info->description;
 
         $phimhot = Movie::withCount('episode')->where('phim_hot', 1)->where('status', 1)->orderBy('ngaycapnhat', 'DESC')->get();
-        $category_home = Category::with(['movie'=> function($q){ $q->withCount('episode')->where('status', 1); }])->orderBy('id', 'DESC')->where('status', 1)->get();
+        $category_home = Category::with(['movie'=> function($q){ $q->withCount('episode')->where('status', 1); }])->orderBy('position', 'ASC')->where('status', 1)->get();
         return view('pages.home', compact('category_home', 'phimhot', 'meta_title', 'meta_description'));
     }
 
@@ -79,7 +79,7 @@ class IndexController extends Controller
         $meta_title = $cate_slug->title;
         $meta_description = $cate_slug->description;
 
-        $movie = Movie::withCount('episode')->where('category_id', $cate_slug->id)->orderBy('ngaycapnhat', 'DESC')->paginate(40);
+        $movie = Movie::withCount('episode')->where('category_id', $cate_slug->id)->orderBy('position', 'ASC')->paginate(40);
         return view('pages.category', compact('cate_slug', 'movie', 'meta_title', 'meta_description'));
     }
 

@@ -25,12 +25,17 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     </script>
     <!-- Bootstrap Core CSS -->
     <link href="{{asset('backend/css/bootstrap.css')}}" rel="stylesheet" type="text/css" />
+
     <!-- Custom CSS -->
     <link href="{{asset('backend/css/style.css')}}" rel="stylesheet" type="text/css" />
+
     <!-- font-awesome icons CSS -->
     <link href="{{asset('backend/css/font-awesome.css')}}" rel="stylesheet" />
     <link href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" rel="stylesheet" />
     <!-- //font-awesome icons CSS-->
+
+    {{-- Sortable CSS --}}
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 
     <!-- side nav css file -->
     <link
@@ -246,6 +251,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                     <li>
                       <a href="{{route('movie.index')}}"
                         ><i class="fa fa-angle-right"></i> Liệt kê phim </a
+                      >
+                    </li>
+                    <li>
+                      <a href="{{route('sort-movie')}}"
+                        ><i class="fa fa-angle-right"></i> Sắp xếp phim </a
                       >
                     </li>
                   </ul>
@@ -764,6 +774,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <!-- new added graphs chart js-->
     <script src="{{asset('backend/js/Chart.bundle.js')}}"></script>
     <script src="{{asset('backend/js/utils.js')}}"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
     <script>
       var MONTHS = [
         'January',
@@ -939,6 +950,67 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <!-- //Classie -->
     <!-- //for toggle left push menu script -->
     <!--scrolling js-->
+
+    <script>
+      $('#sortable_navbar').sortable({
+        {{-- placeholder: 'ui-state-highlight', --}}
+        update: function(event, ui){
+          var array_id = [];
+          $('.category_position li').each(function(){
+            array_id.push($(this).attr('id'));
+          })
+
+          $.ajax({
+            headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url:"{{route('resorting-navbar')}}",
+            method:"POST",
+            data:{array_id:array_id},
+            success:function(data){
+              alert('Sắp xếp thứ tự menu thành công');
+            }
+          });
+        }
+      })
+
+      $("#sortable_navbar").disableSelection();
+    </script>
+
+    <script>
+      $('.sortable_movie').sortable({
+        update: function(event, ui){
+          var movie_array = [];
+          $('.movie_position .box-phim').each(function(){
+            movie_array.push($(this).attr('id'));
+          })
+
+          $.ajax({
+            headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url:"{{route('resorting-movie')}}",
+            method:"POST",
+            data:{movie_array:movie_array},
+            success:function(data){
+              alert('Sắp xếp thứ tự phim thành công');
+            }
+          });
+        }
+      })
+
+      $(".sortable_movie").disableSelection();
+
+    </script>
+
+    <script>
+      $( function() {
+        $( "#sortable_navbar" ).sortable({
+          placeholder: "ui-state-highlight"
+        });
+        $( "#sortable_navbar" ).disableSelection();
+      } );
+    </>
 
     <script type="text/javascript">
         $(document).ready(function(){

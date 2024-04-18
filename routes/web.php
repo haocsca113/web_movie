@@ -60,6 +60,10 @@ Route::post('/update-season-phim', [MovieController::class, 'update_season']);
 Route::get('/update-topview-phim', [MovieController::class, 'update_topview']);
 Route::post('/filter-topview-phim', [MovieController::class, 'filter_topview']);
 Route::get('/filter-topview-default', [MovieController::class, 'filter_default']);
+Route::get('/filter-topview-default', [MovieController::class, 'filter_default']);
+Route::get('/sort-movie', [MovieController::class, 'sort_movie'])->name('sort-movie');
+Route::post('/resorting-navbar', [MovieController::class, 'resorting_navbar'])->name('resorting-navbar');
+Route::post('/resorting-movie', [MovieController::class, 'resorting_movie'])->name('resorting-movie');
 
 //thay doi du lieu movie bang ajax
 Route::get('/category-choose', [MovieController::class, 'category_choose'])->name('category-choose');

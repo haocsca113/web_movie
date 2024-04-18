@@ -35,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $phimhot_sidebar = Movie::where('phim_hot', 1)->where('status', 1)->orderBy('ngaycapnhat', 'DESC')->take('30')->get();
         $phimhot_trailer = Movie::where('resolution', 5)->where('status', 1)->orderBy('ngaycapnhat', 'DESC')->take('10')->get();
-        $category = Category::orderBy('id', 'DESC')->where('status', 1)->get();
+        $category = Category::orderBy('position', 'ASC')->where('status', 1)->get();
         $genre = Genre::orderBy('id', 'DESC')->get();
         $country = Country::orderBy('id', 'DESC')->get();
 
