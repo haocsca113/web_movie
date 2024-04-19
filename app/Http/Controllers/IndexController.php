@@ -18,34 +18,41 @@ use DB;
 class IndexController extends Controller
 {
     public function locphim(){
-        $sapxep = $_GET['order'];
+        $order = $_GET['order'];
         $genre_get = $_GET['genre'];
         $country_get = $_GET['country'];
         $year_get = $_GET['year'];
 
-        if($sapxep == '' && $genre_get == '' && $country_get == '' && $year_get == ''){
+        if($order == '' && $genre_get == '' && $country_get == '' && $year_get == ''){
             
             return redirect()->back();      
         }
         else{
-            $movie = Movie::withCount('episode');
-            if($genre_get){
-                $movie = $movie->where('genre_id', '=', $genre_get);
-            }
-            elseif($country_get){
-                $movie = $movie->where('country_id', '=', $country_get);
-            }
-            elseif($year_get){
-                $movie = $movie->where('year', '=', $year_get);
-            }
-            elseif($sapxep){
-                $movie = $movie->orderBy('title', 'ASC');
-            }
-            $movie = $movie->orderBy('ngaycapnhat', 'DESC')->paginate(40);
+            $meta_title = 'Lọc theo phim.';
+            $meta_description = 'Lọc theo phim.';
 
-            // $movie = Movie::withCount('episode')->orWhere('country_id', '=', $country_get)->orWhere('genre_id', '=', $genre_get)->orWhere('year', '=', $year_get)->orderBy('ngaycapnhat', 'DESC')->paginate(40);
+            $movie_array = Movie::withCount('episode'); // lấy ra phim và đếm số tập
+            
+            if($country_get){ // có lọc quốc gia
+                $movie_array = $movie_array->where('country_id', $country_get);
+            }
+            if($year_get){
+                $movie_array = $movie_array->where('year', $year_get);
+            }
+            if($order){
+                $movie_array = $movie_array->orderBy($order, 'DESC');
+            }
 
-            return view('pages.locphim', compact('movie'));
+            $movie_array = $movie_array->with('movie_genre');
+            $movie = array();
+            foreach($movie_array as $mov){
+                foreach($mov->movie_genre as $mov_gen){
+                    $movie = $movie_array->whereIn('genre_id', [$mov_gen->genre_id]);
+                }
+            }
+            $movie = $movie_array->paginate(40);
+
+            return view('pages.locphim', compact('movie', 'meta_title', 'meta_description'));
         }
     }
 

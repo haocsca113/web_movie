@@ -11,6 +11,8 @@ use App\Http\Controllers\MovieController;
 use App\Http\Controllers\EpisodeController;
 use App\Http\Controllers\InfoController;
 use App\Http\Controllers\LinkMovieController;
+use App\Http\Controllers\LoginGoogleController;
+use App\Http\Controllers\LoginFBController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,6 +77,15 @@ Route::get('/thuocphim-choose', [MovieController::class, 'thuocphim_choose'])->n
 Route::get('/resolution-choose', [MovieController::class, 'resolution_choose'])->name('resolution-choose');
 Route::post('/update-image-movie-ajax', [MovieController::class, 'update_image_movie_ajax'])->name('update-image-movie-ajax');
 Route::post('/watch-video', [MovieController::class, 'watch_video'])->name('watch-video');
+
+// Login by google account
+Route::get('auth/google', [LoginGoogleController::class, 'redirectToGoogle'])->name('login-by-google');
+Route::get('auth/google/callback', [LoginGoogleController::class, 'handleGoogleCallback']);
+Route::get('logout-home', [LoginGoogleController::class, 'logout_home'])->name('logout-home');
+
+// Login by facebook account
+Route::get('auth/facebook', [LoginFBController::class, 'redirectToFacebook'])->name('login-by-facebook');
+Route::get('auth/facebook/callback', [LoginFBController::class, 'handleFacebookCallback']);
 
 
 

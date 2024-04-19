@@ -140,9 +140,18 @@
                            <li class="mega"><a title="{{$cate->title}}" href="{{route('category', $cate->slug)}}">{{$cate->title}}</a></li>
                         @endforeach
                   
-                        <!-- <li><a title="Phim Lẻ" href="danhmuc.php">Phim Lẻ</a></li>
-                        <li><a title="Phim Bộ" href="danhmuc.php">Phim Bộ</a></li>
-                        <li><a title="Phim Chiếu Rạp" href="danhmuc.php">Phim Chiếu Rạp</a></li> -->
+                        <li class="mega dropdown">
+                           <a title="Đăng nhập" href="#" data-toggle="dropdown" class="dropdown-toggle" aria-haspopup="true">Tài khoản @if(Auth::user()) : {{Auth::user()->name}} <span class="caret"></span> @endif </a>
+                           <ul role="menu" class=" dropdown-menu">
+                              @if(!Auth::user())
+                                 <li><a title="Đăng nhập google" href="{{ route('login-by-google') }}">Đăng nhập google</a></li>
+                                 <li><a title="Đăng nhập facebook" href="{{ route('login-by-facebook') }}">Đăng nhập facebook</a></li>
+                              @else
+                                 <li><a title="Đăng xuất" href="{{ route('logout-home') }}">Đăng xuất</a></li>
+                              @endif
+                           </ul>
+                        </li>
+
                      </ul>
                   </div>
                   {{-- <ul class="nav navbar-nav navbar-left" style="background:#000;">
@@ -164,7 +173,7 @@
       </div>
       <div class="container">
          @yield('content')
-         @include('pages.include.banner')
+         {{-- @include('pages.include.banner') --}}
       </div>
       <div class="clearfix"></div>
       <footer id="footer" class="clearfix">

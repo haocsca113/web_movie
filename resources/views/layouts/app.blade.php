@@ -669,6 +669,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
           
           <!-- for amcharts js -->
           <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+          <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
           <script src="{{asset('backend/js/amcharts.js')}}"></script>
           <script src="{{asset('backend/js/serial.js')}}"></script>
           <script src="{{asset('backend/js/export.min.js')}}"></script>
@@ -774,7 +775,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <!-- new added graphs chart js-->
     <script src="{{asset('backend/js/Chart.bundle.js')}}"></script>
     <script src="{{asset('backend/js/utils.js')}}"></script>
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    {{-- <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script> --}}
     <script>
       var MONTHS = [
         'January',
@@ -951,6 +952,69 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <!-- //for toggle left push menu script -->
     <!--scrolling js-->
 
+    <script type="text/javascript">
+        $('.select-year').change(function(){
+            var year = $(this).find(':selected').val();
+            var id_phim = $(this).attr('id');
+
+            $.ajax({
+                url: "{{url('/update-year-phim')}}",
+                method: "GET",
+                data: {year: year, id_phim: id_phim},
+                success: function(){
+                    alert('Thay đổi năm phim theo năm ' + year + ' thành công');
+                }
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+        $('.select-season').change(function(){
+            var season = $(this).find(':selected').val();
+            var id_phim = $(this).attr('id');
+
+            $.ajax({
+                url: "{{url('/update-season-phim')}}",
+                method: "POST",
+                data: {season: season, id_phim: id_phim},
+                headers: {
+                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  },
+                success: function(){
+                    alert('Thay đổi phim theo season ' + season + ' thành công');
+                }
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+        $('.select-topview').change(function(){
+            var topview = $(this).find(':selected').val();
+            var id_phim = $(this).attr('id');
+            if(topview == 0)
+            {
+                var text = 'Ngày';
+            }
+            else if(topview == 1)
+            {
+                var text = 'Tuần';
+            }
+            else
+            {
+                var text = 'Năm';
+            }
+
+            $.ajax({
+                url: "{{url('/update-topview-phim')}}",
+                method: "GET",
+                data: {topview: topview, id_phim: id_phim},
+                success: function(){
+                    alert('Thay đổi phim theo top view ' + text + ' thành công');
+                }
+            });
+        })
+    </script>
+
     <script>
       $('#sortable_navbar').sortable({
         {{-- placeholder: 'ui-state-highlight', --}}
@@ -1003,14 +1067,14 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
     </script>
 
-    <script>
+    {{-- <script>
       $( function() {
         $( "#sortable_navbar" ).sortable({
           placeholder: "ui-state-highlight"
         });
         $( "#sortable_navbar" ).disableSelection();
       } );
-    </>
+    </script> --}}
 
     <script type="text/javascript">
         $(document).ready(function(){
