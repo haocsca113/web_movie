@@ -140,7 +140,7 @@
                            <li class="mega"><a title="{{$cate->title}}" href="{{route('category', $cate->slug)}}">{{$cate->title}}</a></li>
                         @endforeach
                   
-                        <li class="mega dropdown">
+                        {{-- <li class="mega dropdown">
                            <a title="Đăng nhập" href="#" data-toggle="dropdown" class="dropdown-toggle" aria-haspopup="true">Tài khoản @if(Auth::user()) : {{Auth::user()->name}} <span class="caret"></span> @endif </a>
                            <ul role="menu" class=" dropdown-menu">
                               @if(!Auth::user())
@@ -150,7 +150,7 @@
                                  <li><a title="Đăng xuất" href="{{ route('logout-home') }}">Đăng xuất</a></li>
                               @endif
                            </ul>
-                        </li>
+                        </li> --}}
 
                      </ul>
                   </div>
