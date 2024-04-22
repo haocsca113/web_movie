@@ -31,8 +31,8 @@
 //     ],
 
 //     'google' => [
-//         'client_id' => '636109156997-839b365mq8mk20pm8f03gl8bv52b7ikp.apps.googleusercontent.com',
-//         'client_secret' => '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',
+//         'client_id' => '',
+//         'client_secret' => '',
 //         'redirect' => env('APP_URL').'/auth/google/callback',
 //     ],
 
