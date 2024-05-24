@@ -10,6 +10,7 @@ use App\Models\Country;
 use App\Models\Movie;
 use App\Models\Episode;
 use App\Models\Movie_Genre;
+use App\Models\Movie_Category;
 use App\Models\Rating;
 use App\Models\Info;
 use App\Models\LinkMovie;
@@ -86,7 +87,14 @@ class IndexController extends Controller
         $meta_title = $cate_slug->title;
         $meta_description = $cate_slug->description;
 
-        $movie = Movie::withCount('episode')->where('category_id', $cate_slug->id)->orderBy('position', 'ASC')->paginate(40);
+        //nhieu danh muc
+        $movie_category = Movie_category::where('category_id', $cate_slug->id)->get();
+        $many_category = [];
+        foreach($movie_category as $key => $movi){
+            $many_category[] = $movi->movie_id;
+        }
+
+        $movie = Movie::withCount('episode')->whereIn('id', $many_category)->orderBy('ngaycapnhat', 'DESC')->paginate(40);
         return view('pages.category', compact('cate_slug', 'movie', 'meta_title', 'meta_description'));
     }
 
@@ -179,7 +187,7 @@ class IndexController extends Controller
     }
 
     public function watch($slug, $tap, $server_active){
-        $movie = Movie::with('category', 'genre', 'country', 'movie_genre', 'episode')->where('slug', $slug)->where('status', 1)->first();
+        $movie = Movie::with('category', 'genre', 'country', 'movie_genre', 'movie_category', 'episode')->where('slug', $slug)->where('status', 1)->first();
         // return response()->json($movie);
         $meta_title = 'Xem phim: '.$movie->title;
         $meta_description = $movie->description;

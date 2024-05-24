@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Movie;
 use App\Models\Movie_Genre;
+use App\Models\Movie_Category;
 use App\Models\Category;
 use App\Models\Genre;
 use App\Models\Country;
@@ -257,8 +258,9 @@ class MovieController extends Controller
         $category = Category::pluck('title', 'id');
         $genre = Genre::pluck('title', 'id');
         $list_genre = Genre::all();
+        $list_category = Category::all();
         $country = Country::pluck('title', 'id');
-        return view('admincp.movie.form', compact('category', 'genre', 'country', 'list_genre'));
+        return view('admincp.movie.form', compact('category', 'genre', 'country', 'list_genre', 'list_category'));
     }
 
     /**
@@ -283,10 +285,10 @@ class MovieController extends Controller
         $movie->slug = $data['slug'];
         $movie->description = $data['description'];
         $movie->status = $data['status'];
-        $movie->category_id = $data['category_id'];
         $movie->thuocphim = $data['thuocphim'];
         $movie->count_views = rand(100, 99999);
-
+        
+        // $movie->category_id = $data['category_id'];
         // $movie->genre_id = $data['genre_id'];
 
         $movie->country_id = $data['country_id'];
@@ -296,6 +298,11 @@ class MovieController extends Controller
         foreach($data['genre'] as $key => $gen)
         {
             $movie->genre_id = $gen[0];
+        }
+
+        foreach($data['category'] as $key => $cate)
+        {
+            $movie->category_id = $cate[0];
         }
         
 
@@ -312,6 +319,7 @@ class MovieController extends Controller
         $movie->save();
         //them nhieu the loai cho phim
         $movie->movie_genre()->attach($data['genre']);
+        $movie->movie_category()->attach($data['category']);
 
         // return redirect()->back();
         return redirect()->route('movie.index');
@@ -339,10 +347,12 @@ class MovieController extends Controller
         $category = Category::pluck('title', 'id');
         $genre = Genre::pluck('title', 'id');
         $list_genre = Genre::all();
+        $list_category = Category::all();
         $country = Country::pluck('title', 'id');
         $movie = Movie::find($id);
         $movie_genre = $movie->movie_genre;
-        return view('admincp.movie.form', compact('category', 'genre', 'country', 'movie', 'list_genre', 'movie_genre'));
+        $movie_category = $movie->movie_category;
+        return view('admincp.movie.form', compact('category', 'genre', 'country', 'movie', 'list_genre', 'movie_genre', 'list_category', 'movie_category'));
     }
 
     /**
@@ -369,9 +379,9 @@ class MovieController extends Controller
         $movie->slug = $data['slug'];
         $movie->description = $data['description'];
         $movie->status = $data['status'];
-        $movie->category_id = $data['category_id'];
         $movie->thuocphim = $data['thuocphim'];
-
+        
+        // $movie->category_id = $data['category_id'];
         // $movie->genre_id = $data['genre_id'];
         $movie->country_id = $data['country_id'];
         $movie->ngaycapnhat = Carbon::now('Asia/Ho_Chi_Minh');
@@ -379,6 +389,11 @@ class MovieController extends Controller
         foreach($data['genre'] as $key => $gen)
         {
             $movie->genre_id = $gen[0];
+        }
+
+        foreach($data['category'] as $key => $cate)
+        {
+            $movie->category_id = $cate[0];
         }
 
         // them hinh anh
@@ -400,6 +415,7 @@ class MovieController extends Controller
         }
         $movie->save();
         $movie->movie_genre()->sync($data['genre']);
+        $movie->movie_category()->sync($data['category']);
 
         // return redirect()->back();
         return redirect()->route('movie.index');

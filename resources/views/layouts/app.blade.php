@@ -258,6 +258,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                         ><i class="fa fa-angle-right"></i> Sắp xếp phim </a
                       >
                     </li>
+                    <li>
+                      <a href="{{route('leech-movie')}}"
+                        ><i class="fa fa-angle-right"></i> Leech phim </a
+                      >
+                    </li>
                   </ul>
                 </li>
 
@@ -951,6 +956,120 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <!-- //Classie -->
     <!-- //for toggle left push menu script -->
     <!--scrolling js-->
+
+    <script type="text/javascript">
+        $('.country_choose').change(function(){
+            var country_id = $(this).val();
+            var movie_id = $(this).attr('id');
+
+            $.ajax({
+                url: "{{route('country-choose')}}",
+                method: "GET",
+                data: {country_id:country_id, movie_id:movie_id},
+                success: function(data){
+                    alert('Thay đổi thành công');
+                }
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+        $('.phimhot_choose').change(function(){
+            var phimhot_val = $(this).val();
+            var movie_id = $(this).attr('id');
+            {{-- alert(phimhot_val);
+            alert(movie_id); --}}
+        
+            $.ajax({
+                url: "{{route('phimhot-choose')}}",
+                method: "GET",
+                data: {phimhot_val:phimhot_val, movie_id:movie_id},
+                success: function(data){
+                    alert('Thay đổi thành công');
+                }
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+        $('.phude_choose').change(function(){
+            var phude_val = $(this).val();
+            var movie_id = $(this).attr('id');
+            {{-- alert(phude_val);
+            alert(movie_id); --}}
+        
+            $.ajax({
+                url: "{{route('phude-choose')}}",
+                method: "GET",
+                data: {phude_val:phude_val, movie_id:movie_id},
+                success: function(data){
+                    alert('Thay đổi thành công');
+                }
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+        $('.trangthai_choose').change(function(){
+            var trangthai_val = $(this).val();
+            var movie_id = $(this).attr('id');
+        
+            $.ajax({
+                url: "{{route('trangthai-choose')}}",
+                method: "GET",
+                data: {trangthai_val:trangthai_val, movie_id:movie_id},
+                success: function(data){
+                    alert('Thay đổi thành công');
+                }
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+        $('.thuocphim_choose').change(function(){
+            var thuocphim_val = $(this).val();
+            var movie_id = $(this).attr('id');
+        
+            $.ajax({
+                url: "{{route('thuocphim-choose')}}",
+                method: "GET",
+                data: {thuocphim_val:thuocphim_val, movie_id:movie_id},
+                success: function(data){
+                    alert('Thay đổi thành công');
+                }
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+        $('.resolution_choose').change(function(){
+            var resolution_val = $(this).val();
+            var movie_id = $(this).attr('id');
+        
+            $.ajax({
+                url: "{{route('resolution-choose')}}",
+                method: "GET",
+                data: {resolution_val:resolution_val, movie_id:movie_id},
+                success: function(data){
+                    alert('Thay đổi thành công');
+                }
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+        $('.select-movie').change(function(){
+            var id = $(this).val();
+            $.ajax({
+                url: "{{route('select-movie')}}",
+                method: "GET",
+                data: {id:id},
+                success: function(data){
+                    $('#episode').html(data);
+                }
+            });
+        })
+    </script>
 
     <script type="text/javascript">
         $('.select-year').change(function(){

@@ -89,7 +89,14 @@
                         <td>{{$cate->thoiluong}}</td>
 
                         <td>
-                            <img width="100px" src="{{asset('uploads/movie/'.$cate->image)}}">
+                            @php
+                                $image_check = substr($cate->image,0,5)
+                            @endphp
+                            @if($image_check == 'https')
+                                <img width="100px" src="{{$cate->image}}">
+                            @else
+                                <img width="100px" src="{{asset('uploads/movie/'.$cate->image)}}">
+                            @endif
 
                             <input type="file" data-movie_id="{{$cate->id}}" id="file-{{$cate->id}}" name="image_choose" class="form-control-file file_image" accept="image/*">
 
@@ -177,16 +184,17 @@
                                     <option value="0">Không</option>
                                 @endif
                             </select>
-                        </td>
+                        </td>                
 
                         <td>
-                            {{-- {{$cate->category->title}} --}}
-                            {!! Form::select('category_id', $category, isset($cate) ? $cate->category->id : '', ['class' => 'form-control category_choose', 'id' => $cate->id]) !!}
+                            @foreach($cate->movie_category as $catego)
+                                <span class="badge badge-dark">{{$catego->title}}</span>
+                            @endforeach
                         </td>
 
                         <td>
                             @foreach($cate->movie_genre as $gen)
-                                {{$gen->title}}
+                                <span class="badge badge-dark">{{$gen->title}}</span>
                             @endforeach
                         </td>
 

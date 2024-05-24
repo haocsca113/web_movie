@@ -106,7 +106,9 @@
                            @endforeach
                         </li>
                         <li class="list-info-group-item"><span>Danh mục phim</span> : 
-                           <a href="{{route('category', [$movie->category->slug])}}" rel="category tag">{{$movie->category->title}}</a>                        
+                           @foreach($movie->movie_category as $catego)   
+                              <a href="{{route('category', $catego->slug)}}" rel="category tag">{{$catego->title}}</a>
+                           @endforeach                   
                         </li>
 
                         <li class="list-info-group-item"><span>Quốc gia</span> : 
