@@ -1136,7 +1136,6 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
     <script>
       $('#sortable_navbar').sortable({
-        {{-- placeholder: 'ui-state-highlight', --}}
         update: function(event, ui){
           var array_id = [];
           $('.category_position li').each(function(){
@@ -1183,7 +1182,29 @@ License URL: http://creativecommons.org/licenses/by/3.0/
       })
 
       $(".sortable_movie").disableSelection();
+    </script>
 
+    <script>
+      $('.leech_details').click(function(){
+        var slug = $(this).data('movie_slug');
+        
+        $.ajax({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          },
+          url:"{{route('watch-leech-detail')}}",
+          method:"POST",
+          dataType:"JSON",
+          data:{slug:slug},
+          success:function(data){
+            $('#content-title').html(data.content_title);
+            $('#content-detail').html(data.content_detail);
+          }
+        });
+        
+      })
+
+      $(".sortable_movie").disableSelection();
     </script>
 
     {{-- <script>

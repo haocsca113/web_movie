@@ -95,6 +95,9 @@ Route::get('leech-episode/{slug}', [LeechMovieController::class, 'leech_episode'
 Route::post('leech-store/{slug}', [LeechMovieController::class, 'leech_store'])->name('leech-store');
 Route::post('leech-episode-store/{slug}', [LeechMovieController::class, 'leech_episode_store'])->name('leech-episode-store');
 
+// ajax chi tiet phim
+Route::post('watch-leech-detail', [LeechMovieController::class, 'watch_leech_detail'])->name('watch-leech-detail');
+
 
 
 
