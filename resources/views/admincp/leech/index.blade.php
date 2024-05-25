@@ -28,20 +28,21 @@
             <td><img src="{{$resp['pathImage'].$res['poster_url']}}" width="80px" height="80px"></td>
             <td>{{$res['year']}}</td>
             <td>
-                <a href="{{route('leech-detail', $res['slug'])}}" class="btn btn-primary">Chi tiết phim</a>
+                <a href="{{route('leech-detail', $res['slug'])}}" class="btn btn-primary btn-sm">Chi tiết phim</a>
+                <a href="{{route('leech-episode', $res['slug'])}}" class="btn btn-info btn-sm">Tập phim</a>
                 @php
                     $movie = \App\Models\Movie::where('slug', $res['slug'])->first();
                 @endphp 
                 @if(!$movie)
                     <form method="POST" action="{{route('leech-store', $res['slug'])}}">
                         @csrf
-                        <input type="submit" class="btn btn-success" value="Add Movie">
+                        <input type="submit" class="btn btn-success btn-sm" value="Thêm phim">
                     </form>
                 @else
                     <form method="POST" action="{{route('movie.destroy', $movie->id)}}">
                         @csrf
                         @method('DELETE')
-                        <input type="submit" class="btn btn-danger" value="Delete Movie">
+                        <input type="submit" class="btn btn-danger btn-sm" value="Xóa phim">
                     </form>
                 @endif    
             </td>

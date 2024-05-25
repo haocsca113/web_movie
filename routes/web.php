@@ -91,7 +91,9 @@ Route::get('auth/facebook/callback', [LoginFBController::class, 'handleFacebookC
 // route leech movie
 Route::get('leech-movie', [LeechMovieController::class, 'leech_movie'])->name('leech-movie');
 Route::get('leech-detail/{slug}', [LeechMovieController::class, 'leech_detail'])->name('leech-detail');
+Route::get('leech-episode/{slug}', [LeechMovieController::class, 'leech_episode'])->name('leech-episode');
 Route::post('leech-store/{slug}', [LeechMovieController::class, 'leech_store'])->name('leech-store');
+Route::post('leech-episode-store/{slug}', [LeechMovieController::class, 'leech_episode_store'])->name('leech-episode-store');
 
 
 

@@ -9,6 +9,8 @@ use App\Models\Movie_Category;
 use App\Models\Category;
 use App\Models\Country;
 use App\Models\Genre;
+use App\Models\Episode;
+use App\Models\LinkMovie;
 use Carbon\Carbon;
 
 class LeechMovieController extends Controller
@@ -24,10 +26,38 @@ class LeechMovieController extends Controller
         return view('admincp.leech.index', compact('resp'));
     }
 
+    public function leech_episode($slug){
+        $resp = Http::get("https://ophim1.com/phim/".$slug)->json();
+        return view('admincp.leech.leech_episode', compact('resp'));
+    }
+
     public function leech_detail($slug){
         $resp = Http::get("https://ophim1.com/phim/".$slug)->json();
         $resp_movie[] = $resp['movie'];
         return view('admincp.leech.leech_detail', compact('resp_movie'));
+    }
+
+    public function leech_episode_store(Request $request, $slug){
+        $movie = Movie::where('slug', $slug)->first();
+        $resp = Http::get("https://ophim1.com/phim/".$slug)->json();
+        foreach($resp['episodes'] as $key => $res){
+            foreach($res['server_data'] as $key_data => $res_data){
+                $episode = new Episode();
+                $episode->movie_id = $movie->id;
+                $episode->linkphim = '<p><iframe allowfullscreen frameborder="0" height="360" width="100%" scrolling="0" src="'.$res_data['link_embed'].'" ></iframe></p>';
+                $episode->episode = $res_data['name'];
+                if($key_data == 0){
+                    $linkmovie = LinkMovie::orderBy('id', 'DESC')->first();
+                    $episode->server = $linkmovie->id;
+                }
+                else{
+                    $linkmovie = LinkMovie::orderBy('id', 'ASC')->first();
+                    $episode->server = $linkmovie->id;
+                }
+                $episode->save();
+            }
+        }
+        return redirect()->back();
     }
 
     public function leech_store(Request $request, $slug){
