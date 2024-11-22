@@ -7,6 +7,8 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use App\Models\Detect_Attack;
+use Illuminate\Support\Facades\Auth;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -58,6 +60,30 @@ class RouteServiceProvider extends ServiceProvider
     {
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
+        });
+
+        RateLimiter::for('login', function (Request $request) {
+            $ip = $request->ip();
+            $email = $request->input('email', 'unknown');
+    
+            return Limit::perMinute(5)->by($ip)->response(function () use ($ip, $email) {
+                Detect_Attack::create([
+                    'attack_type' => 'Brute Force',
+                    'details' => 'Brute Force Attack By ip: ' . $ip . '& email: ' .$email,
+                    'detected_at' => now(),
+                ]);
+
+                // Ghi log brute force
+                \Log::warning('Brute force detected', [
+                    'ip' => $ip,
+                    'email' => $email,
+                    'time' => now(),
+                ]);
+    
+                return response()->json([
+                    'message' => 'Too many login attempts. Please try again later.',
+                ], 429);
+            });
         });
     }
 }

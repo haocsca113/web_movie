@@ -286,25 +286,13 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                   </ul>
                 </li>
 
-                {{-- <li class="treeview">
-                  <a href="#">
-                    <i class="fa fa-video-camera"></i>
-                    <span>Tập phim</span>
-                    <i class="fa fa-angle-left pull-right"></i>
+                <li class="treeview">
+                  <a href="{{ route('detect-attack-home') }}">
+                    <i class="fa fa-smile-o" aria-hidden="true"></i>
+                    <span>Phát hiện tấn công</span>
                   </a>
-                  <ul class="treeview-menu">
-                    <li>
-                      <a href="{{route('episode.create')}}"
-                        ><i class="fa fa-angle-right"></i> Thêm tập phim</a
-                      >
-                    </li>
-                    <li>
-                      <a href="{{route('episode.index')}}"
-                        ><i class="fa fa-angle-right"></i> Liệt kê tập phim </a
-                      >
-                    </li>
-                  </ul>
-                </li> --}}
+                  
+                </li>
                 
               </ul>
             </div>

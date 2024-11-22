@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\HomeController;
 //admin controller
@@ -14,6 +15,7 @@ use App\Http\Controllers\LinkMovieController;
 use App\Http\Controllers\LeechMovieController;
 use App\Http\Controllers\LoginGoogleController;
 use App\Http\Controllers\LoginFBController;
+use App\Http\Controllers\DetectAttackController;
 
 /*
 |--------------------------------------------------------------------------
@@ -97,6 +99,12 @@ Route::post('leech-episode-store/{slug}', [LeechMovieController::class, 'leech_e
 
 // ajax chi tiet phim
 Route::post('watch-leech-detail', [LeechMovieController::class, 'watch_leech_detail'])->name('watch-leech-detail');
+
+//********* Detect Attack ************
+Route::get('/home/detect-attack-home', [DetectAttackController::class, 'detect_attack_home'])->name('detect-attack-home');
+
+// Brute Force Attack
+Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:login');
 
 
 
