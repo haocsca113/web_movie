@@ -5,7 +5,15 @@
       <div class="panel-heading">
          <div class="row">
             <div class="col-xs-6">
-               <div class="yoast_breadcrumb hidden-xs"><span><span><a href="">{{$search}}</a> » <span class="breadcrumb_last" aria-current="page">2024</span></span></span></div>
+               <div class="yoast_breadcrumb hidden-xs">
+                  <span>
+                     <span>
+                        {{-- <a href="">{{$search}}</a> »  --}}
+                        <a href="">{{!! $search !!}}</a> » 
+                        <span class="breadcrumb_last" aria-current="page">2024</span>
+                     </span>
+                  </span>
+               </div>
             </div>
          </div>
       </div>
@@ -16,7 +24,10 @@
    <main id="main-contents" class="col-xs-12 col-sm-12 col-md-8">
       <section>
          <div class="section-bar clearfix">
-            <h1 class="section-title"><span>{{$search}}</span></h1>
+            <h1 class="section-title">
+               <span>{{$search}}</span>
+               {{-- <span>{{!! $search !!}}</span> --}}
+            </h1>
          </div>
 
          <div class="section-bar clearfix">
@@ -79,7 +90,13 @@
                <li><a class="next page-numbers" href=""><i class="hl-down-open rotate-right"></i></a></li>
             </ul> --}}
 
-            {!! $movie->links("pagination::bootstrap-4") !!}
+            {{-- {!! $movie->links("pagination::bootstrap-4") !!} --}}
+
+            @if($movie->isNotEmpty())
+               {!! $movie->links("pagination::bootstrap-4") !!}
+            @else
+               <p>Không có phim nào phù hợp.</p>
+            @endif
          </div>
       </section>
    </main>

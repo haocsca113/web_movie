@@ -13,7 +13,16 @@
                   <div class="item post-37176">
                      <a href="{{route('movie', $hot_sidebar->slug)}}" title="{{$hot_sidebar->title}}">
                         <div class="item-link">
-                           <img src="{{asset('uploads/movie/'.$hot_sidebar->image)}}" class="lazy post-thumb" alt="{{$hot_sidebar->title}}" title="{{$hot_sidebar->title}}" />
+                           {{-- <img src="{{asset('uploads/movie/'.$hot_sidebar->image)}}" class="lazy post-thumb" alt="{{$hot_sidebar->title}}" title="{{$hot_sidebar->title}}" /> --}}
+                           @if(strpos($hot_sidebar->image, 'https://') === 0)
+                           {
+                              <img src="{{$hot_sidebar->image}}" class="lazy post-thumb" alt="{{$hot_sidebar->title}}" title="{{$hot_sidebar->title}}" />
+                           }
+                           @else
+                           {
+                              <img src="{{asset('uploads/movie/'.$hot_sidebar->image)}}" class="lazy post-thumb" alt="{{$hot_sidebar->title}}" title="{{$hot_sidebar->title}}" />
+                           }
+                           @endif
                            <span class="is_trailer">
                               @if($hot_sidebar->resolution == 0)
                                  HD

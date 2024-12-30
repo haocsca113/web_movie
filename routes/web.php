@@ -106,6 +106,11 @@ Route::get('/home/detect-attack-home', [DetectAttackController::class, 'detect_a
 // Brute Force Attack
 Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:login');
 
+Route::post('/home/detect-attack-home/destroy-detect-attack/{id}', [DetectAttackController::class, 'destroy_detect_attack'])->name('destroy-detect-attack');
+
+// Tìm kiếm bằng hình ảnh
+Route::post('/search/image', [IndexController::class, 'searchByImage'])->name('search.image');
+
 
 
 

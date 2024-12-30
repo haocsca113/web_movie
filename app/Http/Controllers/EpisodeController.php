@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Movie;
 use App\Models\Episode;
 use App\Models\LinkMovie;
+use App\Events\EpisodeAdded;
 
 class EpisodeController extends Controller
 {
@@ -60,6 +61,10 @@ class EpisodeController extends Controller
         $episode->episode = $data['episode'];
         $episode->server = $data['linkserver'];
         $episode->save();
+
+        // Kích hoạt sự kiện
+        EpisodeAdded::dispatch($episode);
+
         return redirect()->back();
     }
 
@@ -126,7 +131,8 @@ class EpisodeController extends Controller
     public function destroy($id)
     {
         $episode = Episode::find($id)->delete();
-        return redirect()->to('episode');
+        // return redirect()->to('episode');
+        return redirect()->to('add-episode/'.$episode->movie_id);
     }
 
     public function select_movie()

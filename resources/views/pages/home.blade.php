@@ -47,7 +47,15 @@
          <article class="thumb grid-item post-38498">
             <div class="halim-item">
                <a class="halim-thumb" href="{{route('movie', $hot->slug)}}" title="{{$hot->title}}">
-                  <figure><img class="lazy img-responsive" src="{{asset('uploads/movie/'.$hot->image)}}" alt="{{$hot->title}}" title="{{$hot->title}}"></figure>
+                  @if(strpos($hot->image, 'https://') === 0)
+                  {
+                     <figure><img class="lazy img-responsive" src="{{$hot->image}}" alt="{{$hot->title}}" title="{{$hot->title}}"></figure>
+                  }
+                  @else
+                  {
+                     <figure><img class="lazy img-responsive" src="{{asset('uploads/movie/'.$hot->image)}}" alt="{{$hot->title}}" title="{{$hot->title}}"></figure>
+                  }
+                  @endif
                   <span class="status">
                      @if($hot->resolution == 0)
                         HD
@@ -125,7 +133,16 @@
                         @else
                            <img class="lazy img-responsive" src="{{asset('uploads/movie/'.$mov->image)}}" alt="{{$mov->title}}" title="{{$mov->title}}">
                         @endif --}}
-                        <img class="lazy img-responsive" src="{{asset('uploads/movie/'.$mov->image)}}" alt="{{$mov->title}}" title="{{$mov->title}}">
+                        
+                        @if(strpos($mov->image, 'https://') === 0)
+                        {
+                           <figure><img class="lazy img-responsive" src="{{$mov->image}}" alt="{{$mov->title}}" title="{{$mov->title}}"></figure>
+                        }
+                        @else
+                        {
+                           <figure><img class="lazy img-responsive" src="{{asset('uploads/movie/'.$mov->image)}}" alt="{{$mov->title}}" title="{{$mov->title}}"></figure>
+                        }
+                        @endif
                      </figure>
                      <span class="status">
                         @if($mov->resolution == 0)

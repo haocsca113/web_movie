@@ -60,11 +60,14 @@ class IndexController extends Controller
     public function timkiem(){
         if(isset($_GET['search']))
         {
+            $meta_title = 'Tìm theo phim.';
+            $meta_description = 'Tìm theo phim.';
             $search = $_GET['search'];
+            // $search = filter_var($_GET['search'], FILTER_SANITIZE_STRING); //loc du lieu dau vao khong chua ki tu dac biet
 
             $movie = Movie::withCount('episode')->where('title', 'LIKE', '%'.$search.'%')->orderBy('ngaycapnhat', 'DESC')->paginate(40);
 
-            return view('pages.timkiem', compact('search', 'movie'));
+            return view('pages.timkiem', compact('search', 'movie', 'meta_title', 'meta_description'));
         }
         else
         {
@@ -72,14 +75,37 @@ class IndexController extends Controller
         }        
     }
 
+    public function searchByImage(Request $request){
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        // Lưu hình ảnh
+        $path = $request->file('image')->store('uploads', 'public');
+
+        // Gửi hình ảnh đến API hoặc xử lý bằng thư viện Python
+        $result = $this->analyzeImage(storage_path('app/public/' . $path));
+
+        if (!$result) {
+            return back()->with('error', 'Không thể nhận diện hình ảnh.');
+        }
+
+        // Tìm phim dựa trên kết quả phân tích
+        $movies = Movie::where('title', 'like', '%' . $result . '%')
+                       ->orWhere('actors', 'like', '%' . $result . '%')
+                       ->get();
+    }
+
     public function home(){
         $info = Info::find(1);
+        // $info = "select * from info where id = 1";
         $meta_title = $info->title;
         $meta_description = $info->description;
 
         $phimhot = Movie::withCount('episode')->where('phim_hot', 1)->where('status', 1)->orderBy('ngaycapnhat', 'DESC')->get();
         $category_home = Category::with(['movie'=> function($q){ $q->withCount('episode')->where('status', 1); }])->orderBy('position', 'ASC')->where('status', 1)->get();
         return view('pages.home', compact('category_home', 'phimhot', 'meta_title', 'meta_description'));
+        // return view('pages.home', compact('category_home', 'phimhot'));
     }
 
     public function category($slug){
@@ -131,14 +157,43 @@ class IndexController extends Controller
         $movie = Movie::withCount('episode')->whereIn('id', $many_genre)->orderBy('ngaycapnhat', 'DESC')->paginate(40);
         return view('pages.genre', compact('gen_slug', 'movie', 'meta_title', 'meta_description'));
     }
-    public function country($slug){
-        $count_slug = Country::where('slug', $slug)->first();
-        $meta_title = $count_slug->title;
-        $meta_description = $count_slug->description;
 
-        $movie = Movie::withCount('episode')->where('country_id', $count_slug->id)->orderBy('ngaycapnhat', 'DESC')->paginate(40);
+    public function country($slug){
+        // $slug = htmlspecialchars($slug, ENT_QUOTES, 'UTF-8');
+
+        $count_slug = DB::select("SELECT * FROM countries where slug = '$slug'"); // raw query
+        if($count_slug) {
+            $meta_title = $count_slug[0]->title;
+            $meta_description = $count_slug[0]->description;
+            $country_ids = array_map(fn($country) => $country->id, $count_slug);
+            $movie = Movie::withCount('episode')
+              ->whereIn('country_id', $country_ids)
+              ->orderBy('ngaycapnhat', 'DESC')
+              ->paginate(40);
+            // $movie = Movie::withCount('episode')->where('country_id', $count_slug[0]->id)->orderBy('ngaycapnhat', 'DESC')->paginate(40);
+        }
+        else {
+            $meta_title = "Không tìm thấy bản ghi phù hợp";
+            $meta_description = "Không tìm thấy bản ghi phù hợp";
+            $movie = collect([]);
+        }
+
+        // $count_slug = Country::where('slug', $slug)->first();
+        // if($count_slug) {
+        //     $meta_title = $count_slug->title;
+        //     $meta_description = $count_slug->description;
+        //     $movie = Movie::withCount('episode')->where('country_id', $count_slug->id)->orderBy('ngaycapnhat', 'DESC')->paginate(40);
+        // }
+        // else {
+        //     $meta_title = "Không tìm thấy bản ghi phù hợp";
+        //     $meta_description = "Không tìm thấy bản ghi phù hợp";
+        //     $movie = collect([]);
+        // }
+
         return view('pages.country', compact('count_slug', 'movie', 'meta_title', 'meta_description'));
     }
+
+
     public function movie($slug){
         $movie = Movie::with('category', 'genre', 'country', 'movie_genre')->where('slug', $slug)->where('status', 1)->first();
         $meta_title = $movie->title;

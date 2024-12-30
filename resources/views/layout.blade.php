@@ -64,12 +64,43 @@
                      <div class="col-xs-12"> 
                         <div class="form-group">
                            <div class="input-group col-xs-12">
-                              <form action={{route('tim-kiem')}} method="GET">
-                                 <input id="timkiem" type="text" name="search" class="form-control" placeholder="Tìm kiếm..." autocomplete="off" required>   
-                                 <button class="btn btn-primary">Tìm kiếm</button>
+                              <form action={{route('tim-kiem')}} method="GET" style="display: flex;">
+                                 <input id="timkiem" type="text" name="search" class="form-control" placeholder="Tìm kiếm...">   {{-- autocomplete="off" required --}}
+                                 <button class="btn btn-primary" style="margin: 0 4px;">Tìm kiếm</button>
+                                 <span id="start-voice" class="microphone" style="border: none; background: none; font-size: 20px; cursor: pointer;">
+                                    <i class="fa fa-microphone" aria-hidden="true"></i>
+                                 </span>
                               </form>
+
+                              <form action="" method="POST" enctype="multipart/form-data" style="display: flex;">
+                                 @csrf
+                                 <input type="file" name="image" accept="image/*" required>
+                                 <button type="submit">Tìm kiếm</button>
+                             </form>
                            </div>
                         </div>
+                        <script>
+                           document.getElementById('start-voice').addEventListener('click', () => {
+                              const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+                              recognition.lang = 'vi-VN'; // Ngôn ngữ tiếng Việt
+                              recognition.start();
+
+                              recognition.onresult = (event) => {
+                                 const transcript = event.results[0][0].transcript;
+                                 console.log(transcript);
+                                 document.getElementById('timkiem').value = transcript;
+                                 // document.getElementById('search-form').submit();
+
+                                 // Tự động gửi dữ liệu tìm kiếm
+                                 window.location.href = `/tim-kiem?search=${encodeURIComponent(transcript)}`;
+                              };
+
+                              recognition.onerror = (event) => {
+                                 alert('Lỗi nhận diện giọng nói: ' + event.error);
+                              };
+                           });
+                        </script>
+
                         <ul class="list-group" id="result" style="display: none;">
                         
                         </ul>
