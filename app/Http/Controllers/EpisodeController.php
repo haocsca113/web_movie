@@ -58,6 +58,7 @@ class EpisodeController extends Controller
         $episode = new Episode();
         $episode->movie_id = $data['movie_id'];
         $episode->linkphim = $data['linkphim'];
+        $episode->linkvideotructiep = $data['linkvideotructiep'];
         $episode->episode = $data['episode'];
         $episode->server = $data['linkserver'];
         $episode->save();
@@ -116,6 +117,7 @@ class EpisodeController extends Controller
         $episode = Episode::find($id);
         $episode->movie_id = $data['movie_id'];
         $episode->linkphim = $data['linkphim'];
+        $episode->linkvideotructiep = $data['linkvideotructiep'];
         $episode->server = $data['linkserver'];
         $episode->episode = $data['episode'];
         $episode->save();
@@ -132,7 +134,7 @@ class EpisodeController extends Controller
     {
         $episode = Episode::find($id)->delete();
         // return redirect()->to('episode');
-        return redirect()->to('add-episode/'.$episode->movie_id);
+        return redirect()->back();
     }
 
     public function select_movie()

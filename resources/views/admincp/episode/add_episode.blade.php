@@ -31,6 +31,11 @@
                             {!! Form::text('linkphim', isset($episode) ? $episode->linkphim : '', ['class' => 'form-control', 'placeholder' => 'Nhập vào dữ liệu']) !!}
                         </div>
 
+                        <div class="form-group mb-3">
+                            {!! Form::label('linkvideotructiep', 'Link Video Trực Tiếp', []) !!}
+                            {!! Form::text('linkvideotructiep', isset($episode) ? $episode->linkvideotructiep : '', ['class' => 'form-control', 'placeholder' => 'Nhập vào dữ liệu']) !!}
+                        </div>
+
 
                         @if(isset($episode))
                             <div class="form-group mb-3">
@@ -71,6 +76,7 @@
                         <th>Hình ảnh</th>
                         <th>Tập phim</th>
                         <th>Link phim</th>
+                        <th>Link video trực tiếp M3U8</th>
                         <th>Server</th>
                         <th>Manage</th>
                     </tr>
@@ -83,6 +89,7 @@
                             <td><img width="100px" src="{{asset('uploads/movie/'.$episode->movie->image)}}"></td>
                             <td>{{$episode->episode}}</td>
                             <td>{{$episode->linkphim}}</td>
+                            <td>{{$episode->linkvideotructiep}}</td>
 
                             <td>
                                 @foreach($list_server as $key => $server_link)

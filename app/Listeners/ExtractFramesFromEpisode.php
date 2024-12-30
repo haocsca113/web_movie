@@ -35,7 +35,7 @@ class ExtractFramesFromEpisode
             mkdir($outputPath, 0755, true);
         }
 
-        $command = "ffmpeg -i \"{$episode->linkphim}\" -vf fps=1 \"$outputPath/frame_%04d.jpg\"";
+        $command = "ffmpeg -i \"{$episode->linkvideotructiep}\" -vf fps=1 \"$outputPath/frame_%04d.jpg\"";
         exec($command, $output, $returnCode);
 
         Log::info("Command: $command"); // Ghi lại lệnh đã thực thi
