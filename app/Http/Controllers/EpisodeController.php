@@ -42,19 +42,7 @@ class EpisodeController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        // $episode_check = Episode::where('episode', $data['episode'])->where('movie_id', $data['movie_id'])->count();
-        // if($episode_check > 0){
-        //     return redirect()->back();
-        // }
-        // else{
-        //     $episode = new Episode();
-        //     $episode->movie_id = $data['movie_id'];
-        //     $episode->linkphim = $data['linkphim'];
-        //     $episode->episode = $data['episode'];
-        //     $episode->server = $data['linkserver'];
-        //     $episode->save();
-        // }  
-
+        
         $episode = new Episode();
         $episode->movie_id = $data['movie_id'];
         $episode->linkphim = $data['linkphim'];

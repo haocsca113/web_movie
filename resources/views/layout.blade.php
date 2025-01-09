@@ -72,7 +72,7 @@
                                  </span>
                               </form>
 
-                              <form action="" method="POST" enctype="multipart/form-data" style="display: flex;">
+                              <form action="{{ route('search.image') }}" method="POST" enctype="multipart/form-data" style="display: flex;">
                                  @csrf
                                  <input type="file" name="image" accept="image/*" required>
                                  <button type="submit">Tìm kiếm</button>

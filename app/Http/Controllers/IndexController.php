@@ -14,7 +14,9 @@ use App\Models\Movie_Category;
 use App\Models\Rating;
 use App\Models\Info;
 use App\Models\LinkMovie;
+use App\Models\Frame;
 use DB;
+use Imagick;
 
 class IndexController extends Controller
 {
@@ -76,25 +78,153 @@ class IndexController extends Controller
     }
 
     public function searchByImage(Request $request){
+        // // Tìm phim dựa trên kết quả phân tích
+        // $movies = Movie::where('title', 'like', '%' . $result . '%')
+        //                ->orWhere('actors', 'like', '%' . $result . '%')
+        //                ->get();
+
         $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
+    
+        // Lưu ảnh tải lên vào thư mục tạm
+        $uploadedImagePath = $request->file('image')->store('temp', 'public');
+        $imagePath = storage_path('app/public/' . $uploadedImagePath);
 
-        // Lưu hình ảnh
-        $path = $request->file('image')->store('uploads', 'public');
+        // Kiểm tra xem tệp có tồn tại không
+        if (!file_exists($imagePath)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tệp hình ảnh không tồn tại.',
+            ], 400);
+        }
+    
+        try {
+            // Gọi hàm tìm kiếm phim
+            $movie = $this->findMovieByImage($imagePath);
+    
+            if ($movie) {
+                return response()->json([
+                    'success' => true,
+                    'movie' => $movie,
+                ]);
+            }
+    
+            return response()->json([
+                'success' => false,
+                'message' => 'Không tìm thấy bộ phim tương ứng.',
+            ]);
+    
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Lỗi xử lý: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
 
-        // Gửi hình ảnh đến API hoặc xử lý bằng thư viện Python
-        $result = $this->analyzeImage(storage_path('app/public/' . $path));
-
-        if (!$result) {
-            return back()->with('error', 'Không thể nhận diện hình ảnh.');
+    function calculateImageSimilarity($imagePath1, $imagePath2)
+    {
+        set_time_limit(0);
+        if (!file_exists($imagePath1) || !file_exists($imagePath2)) {
+            throw new \Exception('Một trong hai tệp hình ảnh không tồn tại.');
         }
 
-        // Tìm phim dựa trên kết quả phân tích
-        $movies = Movie::where('title', 'like', '%' . $result . '%')
-                       ->orWhere('actors', 'like', '%' . $result . '%')
-                       ->get();
+        try {
+            $image1 = new \Imagick($imagePath1);
+            $image2 = new \Imagick($imagePath2);
+
+            // Resize hình ảnh
+            $image1->resizeImage(256, 256, Imagick::FILTER_LANCZOS, 1);
+            $image2->resizeImage(256, 256, Imagick::FILTER_LANCZOS, 1);
+
+            // Lấy histogram
+            $image1Histogram = $image1->getImageHistogram();
+            $image2Histogram = $image2->getImageHistogram();
+
+            // Tính toán độ tương đồng
+            $similarity = 0;
+            foreach ($image1Histogram as $key => $value) {
+                $similarity += abs($value->getColorValue(Imagick::COLOR_RED) -
+                    $image2Histogram[$key]->getColorValue(Imagick::COLOR_RED));
+            }
+
+            return $similarity;
+        } catch (\Exception $e) {
+            throw new \Exception('Lỗi xử lý hình ảnh: ' . $e->getMessage());
+        }
     }
+
+    // function calculateImageSimilarity($imagePath1, $imagePath2)
+    // {
+    //     set_time_limit(0);
+
+    //     if (!file_exists($imagePath1) || !file_exists($imagePath2)) {
+    //         throw new \Exception('Một trong hai tệp hình ảnh không tồn tại.');
+    //     }
+
+    //     try {
+    //         $image1 = new \Imagick($imagePath1);
+    //         $image2 = new \Imagick($imagePath2);
+
+    //         // Resize ảnh nhỏ hơn để giảm dữ liệu
+    //         $image1->resizeImage(16, 16, Imagick::FILTER_LANCZOS, 1);
+    //         $image2->resizeImage(16, 16, Imagick::FILTER_LANCZOS, 1);
+
+    //         // Lấy giá trị màu trung bình
+    //         $averageColor1 = $image1->getImageStatistics();
+    //         $averageColor2 = $image2->getImageStatistics();
+
+    //         // Tính toán độ tương đồng (sử dụng khoảng cách Euclidean)
+    //         $similarity = sqrt(
+    //             pow($averageColor1['red']['mean'] - $averageColor2['red']['mean'], 2) +
+    //             pow($averageColor1['green']['mean'] - $averageColor2['green']['mean'], 2) +
+    //             pow($averageColor1['blue']['mean'] - $averageColor2['blue']['mean'], 2)
+    //         );
+
+    //         return $similarity;
+    //     } catch (\Exception $e) {
+    //         throw new \Exception('Lỗi xử lý hình ảnh: ' . $e->getMessage());
+    //     }
+    // }
+
+    public function findMovieByImage($uploadedImagePath)
+    {
+        $frames = Frame::all(); // Lấy tất cả khung hình từ DB
+        $bestMatch = null;
+        $highestSimilarity = PHP_INT_MAX;
+
+        foreach ($frames as $frame) {
+            // $framePath = public_path($frame->frame_path);
+
+            $framePath = storage_path('app/public/'. $frame->frame_path);
+
+            if (!file_exists($framePath)) {
+                continue; // Bỏ qua tệp không tồn tại
+            }
+
+            try {
+                $similarity = $this->calculateImageSimilarity($uploadedImagePath, $framePath);
+    
+                if ($similarity < $highestSimilarity) {
+                    $highestSimilarity = $similarity;
+                    $bestMatch = $frame;
+                }
+    
+            } catch (\Exception $e) {
+                // Ghi log lỗi hoặc bỏ qua khung hình bị lỗi
+                \Log::error('Lỗi so sánh hình ảnh: ' . $e->getMessage());
+                continue;
+            }
+        }
+
+        if ($bestMatch) {
+            return Movie::find($bestMatch->movie_id);
+        }
+
+        return null;
+    }
+
 
     public function home(){
         $info = Info::find(1);
