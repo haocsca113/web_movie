@@ -39,7 +39,16 @@
             <article class="col-md-3 col-sm-3 col-xs-6 thumb grid-item post-37606">
                <div class="halim-item">
                   <a class="halim-thumb" href="{{route('movie', $mov->slug)}}">
-                     <figure><img class="lazy img-responsive" src="{{asset('uploads/movie/'.$mov->image)}}" alt="{{$mov->title}}" title="{{$mov->title}}"></figure>
+                     {{-- <figure><img class="lazy img-responsive" src="{{asset('uploads/movie/'.$mov->image)}}" alt="{{$mov->title}}" title="{{$mov->title}}"></figure> --}}
+                     @if(strpos($mov->image, 'https://') === 0)
+                     {
+                        <figure><img class="lazy img-responsive" src="{{$mov->image}}" alt="{{$mov->title}}" title="{{$mov->title}}"></figure>
+                     }
+                     @else
+                     {
+                        <figure><img class="lazy img-responsive" src="{{asset('uploads/movie/'.$mov->image)}}" alt="{{$mov->title}}" title="{{$mov->title}}"></figure>
+                     }
+                     @endif
                      <span class="status">
                         @if($mov->resolution == 0)
                            HD
@@ -90,7 +99,7 @@
                <li><a class="next page-numbers" href=""><i class="hl-down-open rotate-right"></i></a></li>
             </ul> --}}
 
-            {{-- {!! $movie->links("pagination::bootstrap-4") !!} --}}
+            {{-- {!! $movies->links("pagination::bootstrap-4") !!} --}}
 
             @if($movie->isNotEmpty())
                {!! $movie->links("pagination::bootstrap-4") !!}

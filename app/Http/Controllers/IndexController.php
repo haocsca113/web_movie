@@ -77,53 +77,36 @@ class IndexController extends Controller
         }        
     }
 
-    public function searchByImage(Request $request){
-        // // Tìm phim dựa trên kết quả phân tích
-        // $movies = Movie::where('title', 'like', '%' . $result . '%')
-        //                ->orWhere('actors', 'like', '%' . $result . '%')
-        //                ->get();
-
+    public function searchByImage(Request $request)
+    {
         $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
-    
-        // Lưu ảnh tải lên vào thư mục tạm
+
+        // Lưu ảnh tải lên
         $uploadedImagePath = $request->file('image')->store('temp', 'public');
         $imagePath = storage_path('app/public/' . $uploadedImagePath);
 
-        // Kiểm tra xem tệp có tồn tại không
         if (!file_exists($imagePath)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Tệp hình ảnh không tồn tại.',
-            ], 400);
+            return redirect()->back()->with('error', 'Tệp hình ảnh không tồn tại.');
         }
-    
+
         try {
-            // Gọi hàm tìm kiếm phim
-            $movie = $this->findMovieByImage($imagePath);
-    
-            if ($movie) {
-                return response()->json([
-                    'success' => true,
-                    'movie' => $movie,
-                ]);
-            }
-    
-            return response()->json([
-                'success' => false,
-                'message' => 'Không tìm thấy bộ phim tương ứng.',
-            ]);
-    
+            $moviesQuery = $this->findMovieByImage($imagePath);
+            $movie = $moviesQuery->paginate(40); 
+
+            $meta_title = 'Kết quả tìm kiếm';
+            $meta_description = 'Kết quả tìm kiếm dựa trên hình ảnh.';
+            $search = 'Tìm kiếm bằng hình ảnh';
+
+            return view('pages.timkiem', compact('search', 'movie', 'meta_title', 'meta_description'));
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Lỗi xử lý: ' . $e->getMessage(),
-            ], 500);
+            return redirect()->back()->with('error', 'Lỗi xử lý: ' . $e->getMessage());
         }
     }
 
-    function calculateImageSimilarity($imagePath1, $imagePath2)
+
+    public function calculateImageSimilarity($imagePath1, $imagePath2)
     {
         set_time_limit(0);
         if (!file_exists($imagePath1) || !file_exists($imagePath2)) {
@@ -135,8 +118,8 @@ class IndexController extends Controller
             $image2 = new \Imagick($imagePath2);
 
             // Resize hình ảnh
-            $image1->resizeImage(256, 256, Imagick::FILTER_LANCZOS, 1);
-            $image2->resizeImage(256, 256, Imagick::FILTER_LANCZOS, 1);
+            $image1->resizeImage(16, 16, Imagick::FILTER_LANCZOS, 1);
+            $image2->resizeImage(16, 16, Imagick::FILTER_LANCZOS, 1);
 
             // Lấy histogram
             $image1Histogram = $image1->getImageHistogram();
@@ -154,50 +137,15 @@ class IndexController extends Controller
             throw new \Exception('Lỗi xử lý hình ảnh: ' . $e->getMessage());
         }
     }
-
-    // function calculateImageSimilarity($imagePath1, $imagePath2)
-    // {
-    //     set_time_limit(0);
-
-    //     if (!file_exists($imagePath1) || !file_exists($imagePath2)) {
-    //         throw new \Exception('Một trong hai tệp hình ảnh không tồn tại.');
-    //     }
-
-    //     try {
-    //         $image1 = new \Imagick($imagePath1);
-    //         $image2 = new \Imagick($imagePath2);
-
-    //         // Resize ảnh nhỏ hơn để giảm dữ liệu
-    //         $image1->resizeImage(16, 16, Imagick::FILTER_LANCZOS, 1);
-    //         $image2->resizeImage(16, 16, Imagick::FILTER_LANCZOS, 1);
-
-    //         // Lấy giá trị màu trung bình
-    //         $averageColor1 = $image1->getImageStatistics();
-    //         $averageColor2 = $image2->getImageStatistics();
-
-    //         // Tính toán độ tương đồng (sử dụng khoảng cách Euclidean)
-    //         $similarity = sqrt(
-    //             pow($averageColor1['red']['mean'] - $averageColor2['red']['mean'], 2) +
-    //             pow($averageColor1['green']['mean'] - $averageColor2['green']['mean'], 2) +
-    //             pow($averageColor1['blue']['mean'] - $averageColor2['blue']['mean'], 2)
-    //         );
-
-    //         return $similarity;
-    //     } catch (\Exception $e) {
-    //         throw new \Exception('Lỗi xử lý hình ảnh: ' . $e->getMessage());
-    //     }
-    // }
+    
 
     public function findMovieByImage($uploadedImagePath)
     {
         $frames = Frame::all(); // Lấy tất cả khung hình từ DB
-        $bestMatch = null;
-        $highestSimilarity = PHP_INT_MAX;
+        $matchedMovieIds = [];
 
         foreach ($frames as $frame) {
-            // $framePath = public_path($frame->frame_path);
-
-            $framePath = storage_path('app/public/'. $frame->frame_path);
+            $framePath = storage_path('app/public/' . $frame->frame_path);
 
             if (!file_exists($framePath)) {
                 continue; // Bỏ qua tệp không tồn tại
@@ -205,24 +153,20 @@ class IndexController extends Controller
 
             try {
                 $similarity = $this->calculateImageSimilarity($uploadedImagePath, $framePath);
-    
-                if ($similarity < $highestSimilarity) {
-                    $highestSimilarity = $similarity;
-                    $bestMatch = $frame;
+
+                // Nếu tương tự dưới ngưỡng xác định, thêm vào danh sách
+                if ($similarity < 50) { // Ví dụ: ngưỡng tương tự là 50
+                    $matchedMovieIds[] = $frame->movie_id;
                 }
-    
             } catch (\Exception $e) {
-                // Ghi log lỗi hoặc bỏ qua khung hình bị lỗi
                 \Log::error('Lỗi so sánh hình ảnh: ' . $e->getMessage());
                 continue;
             }
         }
 
-        if ($bestMatch) {
-            return Movie::find($bestMatch->movie_id);
-        }
-
-        return null;
+        // Trả về query builder để phân trang
+        // return Movie::whereIn('id', $matchedMovieIds);
+        return Movie::withCount('episode')->whereIn('id', $matchedMovieIds);
     }
 
 
